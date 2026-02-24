@@ -7,15 +7,25 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Quick RE Analyzer">
 <title>Quick Real Estate Analyzer</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231E40AF'/%3E%3Cpath d='M7 24V12l9-6 9 6v12H18v-7h-4v7z' fill='white'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%231E40AF'/%3E%3Cpath d='M35 135V68l55-35 55 35v67H105V95H75v40z' fill='white'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231E40AF'/%3E%3Cpath d='M16 7L5 16h3v9h6v-6h4v6h6v-9h3L16 7z' fill='white'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%231E40AF'/%3E%3Cpath d='M90 40L28 90h17v52h34v-34h22v34h34V90h17L90 40z' fill='white'/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Helvetica Neue',sans-serif;background:#F3F4F6;min-height:100vh;max-width:480px;margin:0 auto;cursor:pointer}
-.header{background:linear-gradient(135deg,#1E40AF,#3B82F6);padding:24px 20px 18px;border-radius:0 0 24px 24px;color:#fff;position:sticky;top:0;z-index:10}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Helvetica Neue',sans-serif;background:#F3F4F6;min-height:100vh;margin:0 auto;cursor:pointer}
+.header{background:linear-gradient(135deg,#1E40AF,#3B82F6);padding:24px 20px 18px;color:#fff;position:sticky;top:0;z-index:10}
+.header-inner{max-width:960px;margin:0 auto}
 .header h1{font-size:21px;font-weight:800;letter-spacing:-0.5px}
 .header p{font-size:12px;opacity:0.8;margin-top:2px}
-.content{padding:16px 16px 60px}
+.content{padding:16px 16px 60px;max-width:960px;margin:0 auto}
+.desktop-layout{display:flex;gap:24px;align-items:flex-start}
+.desktop-left{flex:1;min-width:0}
+.desktop-right{flex:1;min-width:0;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
+@media(max-width:768px){
+  .content{max-width:480px}
+  .header{border-radius:0 0 24px 24px}
+  .desktop-layout{flex-direction:column}
+  .desktop-right{position:static;max-height:none;overflow-y:visible}
+}
 .section{margin-bottom:16px}
 .sec-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 0;background:none;border:none;cursor:pointer;-webkit-appearance:none;appearance:none;font-family:inherit;touch-action:manipulation}
 .sec-btn span:first-child{font-size:15px;font-weight:700;color:#1F2937}
@@ -103,11 +113,16 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
 <body ontouchstart="">
 
 <div class="header">
-  <h1>Quick Real Estate Analyzer</h1>
-  <p>Buy &amp; Hold &middot; BRRRR &middot; Flip</p>
+  <div class="header-inner">
+    <h1>Quick Real Estate Analyzer</h1>
+    <p>Buy &amp; Hold &middot; BRRRR &middot; Flip</p>
+  </div>
 </div>
+<div id="saveNotice" class="save-notice">Inputs saved</div>
 
 <div class="content">
+<div class="desktop-layout">
+<div class="desktop-left">
 
   <!-- ═══ PROPERTY INFO ═══ -->
   <div class="section">
@@ -268,6 +283,9 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
 
   <button type="button" class="action-btn calc-btn" id="calcBtn">Calculate All Strategies</button>
 
+</div><!-- end desktop-left -->
+<div class="desktop-right">
+
   <!-- ═══ RESULTS ═══ -->
   <div id="results">
 
@@ -417,9 +435,9 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
     </div>
   </div>
 
-</div>
-
-<div class="save-notice" id="saveNotice">Inputs saved</div>
+</div><!-- end desktop-right -->
+</div><!-- end desktop-layout -->
+</div><!-- end content -->
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
@@ -439,52 +457,6 @@ function loanBalY(rRate,termYrs,loan,yr,io,ioYrs){var mr=rRate/12;if(io){if(yr<=
 var useHM=false,useIO=false,showPF=false,showSA=false,numUnits=1,rehabMode='total',activeStrat='bh';
 var units=[{type:'ltr',rent:1800,nightly:150,occ:70,furnish:0}];
 var lastBH=null,lastBR=null,lastFL=null;
-
-// ─── Local Storage Persistence ──────────────────────────────
-var SAVE_KEY='qrea_data_v1';
-var saveTimer=null;
-function saveToLocal(){
-  clearTimeout(saveTimer);
-  saveTimer=setTimeout(function(){
-    saveUD();
-    var data={
-      addr:{street:$('addrStreet').value,unit:$('addrUnit').value,city:$('addrCity').value,state:$('addrState').value,zip:$('addrZip').value},
-      numUnits:numUnits,units:units.slice(0,numUnits),rehabMode:rehabMode,useHM:useHM,useIO:useIO,
-      fields:{}
-    };
-    var ids=['purchasePrice','rehabBudget','sqft','costPerSqft','arv','monthlyInsurance','monthlyTax','sellCostPct',
-      'downPct','bhRate','bhTermYears','refiRate','refiLtv','refiTermYears','ioYears',
-      'hmRate','hmPoints','hmLtc','hmTermMonths','flipHoldMonths','flipHoldCostMo',
-      'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation'];
-    for(var i=0;i<ids.length;i++){data.fields[ids[i]]=$(ids[i]).value}
-    try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}catch(e){}
-    var n=$('saveNotice');n.classList.add('show');setTimeout(function(){n.classList.remove('show')},1200);
-  },800);
-}
-function loadFromLocal(){
-  try{
-    var raw=localStorage.getItem(SAVE_KEY);if(!raw)return;
-    var data=JSON.parse(raw);
-    if(data.addr){
-      $('addrStreet').value=data.addr.street||'';
-      $('addrUnit').value=data.addr.unit||'';
-      $('addrCity').value=data.addr.city||'';
-      $('addrState').value=data.addr.state||'';
-      $('addrZip').value=data.addr.zip||'';
-    }
-    if(data.numUnits){numUnits=data.numUnits}
-    if(data.units){units=data.units;while(units.length<numUnits)units.push({type:'ltr',rent:1800,nightly:150,occ:70,furnish:0})}
-    if(data.rehabMode){
-      rehabMode=data.rehabMode;
-      document.querySelectorAll('.rehab-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')===rehabMode)});
-      $('rehabTotal').style.display=rehabMode==='total'?'block':'none';
-      $('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';
-    }
-    if(data.useHM){useHM=true;$('hmToggle').classList.add('on');$('hmFields').classList.add('show')}
-    if(data.useIO){useIO=true;$('ioToggle').classList.add('on');$('ioFields').style.display='block'}
-    if(data.fields){for(var k in data.fields){if($(k))$(k).value=data.fields[k]}}
-  }catch(e){}
-}
 
 // ─── Section Toggles ─────────────────────────────────────────
 function setupSec(bid,bodyid,aid,open){
@@ -551,7 +523,7 @@ function buildCards(){
   c.innerHTML=html;
   $('unitCount').textContent=numUnits;
 
-  // Live STR calc + auto-save on unit input change
+  // Live STR calc
   c.querySelectorAll('.u-nightly, .u-occ').forEach(function(inp){
     inp.addEventListener('input',function(){
       var card=inp.closest('.unit-card');
@@ -560,29 +532,25 @@ function buildCards(){
         var mo=Math.round((parseFloat(ni.value)||0)*((parseFloat(oi.value)||0)/100)*30.44);
         calc.textContent='= $'+mo.toLocaleString()+'/mo estimated revenue';
       }
-      saveToLocal();
     });
-  });
-  c.querySelectorAll('.u-rent, .u-furn').forEach(function(inp){
-    inp.addEventListener('input',saveToLocal);
   });
 
   // Type toggles
   c.querySelectorAll('.type-opt').forEach(function(btn){
-    function h(e){e.preventDefault();var card=btn.closest('.unit-card');var idx=parseInt(card.getAttribute('data-idx'));saveUD();units[idx].type=btn.getAttribute('data-t');buildCards();saveToLocal()}
+    function h(e){e.preventDefault();var card=btn.closest('.unit-card');var idx=parseInt(card.getAttribute('data-idx'));saveUD();units[idx].type=btn.getAttribute('data-t');buildCards()}
     btn.addEventListener('click',h,false);btn.addEventListener('touchend',function(e){e.preventDefault();h(e)},false);
   });
 }
 
-function addU(e){if(e)e.preventDefault();if(numUnits<20){numUnits++;buildCards();saveToLocal()}}
-function remU(e){if(e)e.preventDefault();if(numUnits>1){saveUD();numUnits--;units.length=numUnits;buildCards();saveToLocal()}}
+function addU(e){if(e)e.preventDefault();if(numUnits<20){numUnits++;buildCards()}}
+function remU(e){if(e)e.preventDefault();if(numUnits>1){saveUD();numUnits--;units.length=numUnits;buildCards()}}
 $('unitPlus').addEventListener('click',addU,false);$('unitPlus').addEventListener('touchend',function(e){e.preventDefault();addU(e)},false);
 $('unitMinus').addEventListener('click',remU,false);$('unitMinus').addEventListener('touchend',function(e){e.preventDefault();remU(e)},false);
 
 // ─── Rehab Toggle ────────────────────────────────────────────
 var rehabBtns=document.querySelectorAll('.rehab-opt');
 rehabBtns.forEach(function(btn){
-  function h(e){e.preventDefault();rehabMode=btn.getAttribute('data-mode');rehabBtns.forEach(function(b){b.classList.remove('active')});btn.classList.add('active');$('rehabTotal').style.display=rehabMode==='total'?'block':'none';$('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';updRehab();saveToLocal()}
+  function h(e){e.preventDefault();rehabMode=btn.getAttribute('data-mode');rehabBtns.forEach(function(b){b.classList.remove('active')});btn.classList.add('active');$('rehabTotal').style.display=rehabMode==='total'?'block':'none';$('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';updRehab()}
   btn.addEventListener('click',h,false);btn.addEventListener('touchend',function(e){e.preventDefault();h(e)},false);
 });
 function updRehab(){if(rehabMode==='sqft')$('calcRehab').textContent=fmt(vl('sqft')*vl('costPerSqft'))}
@@ -590,21 +558,13 @@ function updRehab(){if(rehabMode==='sqft')$('calcRehab').textContent=fmt(vl('sqf
 
 // ─── Toggles ─────────────────────────────────────────────────
 function setupTog(btnId,cb){var btn=$(btnId);btn.addEventListener('click',function(e){e.preventDefault();cb()},false);btn.addEventListener('touchend',function(e){e.preventDefault();cb()},false)}
-setupTog('ioToggle',function(){useIO=!useIO;$('ioToggle').classList.toggle('on');$('ioFields').style.display=useIO?'block':'none';saveToLocal()});
-setupTog('hmToggle',function(){useHM=!useHM;$('hmToggle').classList.toggle('on');$('hmFields').classList.toggle('show');saveToLocal()});
+setupTog('ioToggle',function(){useIO=!useIO;$('ioToggle').classList.toggle('on');$('ioFields').style.display=useIO?'block':'none'});
+setupTog('hmToggle',function(){useHM=!useHM;$('hmToggle').classList.toggle('on');$('hmFields').classList.toggle('show')});
 
 var showPF=false,showSA=false;
 setupTog('pfToggle',function(){showPF=!showPF;$('pfCard').style.display=showPF?'block':'none';$('pfToggle').textContent=showPF?'Hide 10-Year Pro Forma':'Show 10-Year Pro Forma'});
 setupTog('saToggle',function(){showSA=!showSA;$('saCard').style.display=showSA?'block':'none';$('saToggle').textContent=showSA?'Hide Sensitivity Analysis':'Show Sensitivity Analysis'});
 setupTog('discBtn',function(){var o=$('discFull').style.display==='block';$('discFull').style.display=o?'none':'block';$('discBtn').textContent=o?'Read Full Disclaimer':'Hide Full Disclaimer'});
-
-// ─── Auto-save on all standard inputs ────────────────────────
-var saveIds=['addrStreet','addrUnit','addrCity','addrState','addrZip',
-  'purchasePrice','rehabBudget','sqft','costPerSqft','arv','monthlyInsurance','monthlyTax','sellCostPct',
-  'downPct','bhRate','bhTermYears','refiRate','refiLtv','refiTermYears','ioYears',
-  'hmRate','hmPoints','hmLtc','hmTermMonths','flipHoldMonths','flipHoldCostMo',
-  'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation'];
-saveIds.forEach(function(id){if($(id))$(id).addEventListener('input',saveToLocal)});
 
 // ─── Getters ─────────────────────────────────────────────────
 function getRents(){saveUD();var r=[];for(var i=0;i<numUnits;i++){var u=units[i];r.push(u.type==='ltr'?u.rent:Math.round(u.nightly*(u.occ/100)*30.44))}return r}
@@ -932,6 +892,58 @@ function downloadExcel(e){
 }
 $('dlBtn').addEventListener('click',downloadExcel,false);
 $('dlBtn').addEventListener('touchend',function(e){e.preventDefault();downloadExcel(e)},false);
+
+// ─── Data Persistence ────────────────────────────────────────
+var SAVE_KEY='qrea_data_v1';
+var saveTimer=null;
+function saveToLocal(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    saveUD();
+    var data={
+      addrStreet:$('addrStreet').value,addrUnit:$('addrUnit').value,addrCity:$('addrCity').value,
+      addrState:$('addrState').value,addrZip:$('addrZip').value,
+      purchasePrice:$('purchasePrice').value,rehabBudget:$('rehabBudget').value,arv:$('arv').value,
+      sqft:$('sqft').value,costPerSqft:$('costPerSqft').value,rehabMode:rehabMode,
+      monthlyInsurance:$('monthlyInsurance').value,monthlyTax:$('monthlyTax').value,sellCostPct:$('sellCostPct').value,
+      downPct:$('downPct').value,bhRate:$('bhRate').value,bhTermYears:$('bhTermYears').value,
+      refiRate:$('refiRate').value,refiLtv:$('refiLtv').value,refiTermYears:$('refiTermYears').value,
+      ioYears:$('ioYears').value,useIO:useIO,useHM:useHM,
+      hmRate:$('hmRate').value,hmPoints:$('hmPoints').value,hmLtc:$('hmLtc').value,hmTermMonths:$('hmTermMonths').value,
+      flipHoldMonths:$('flipHoldMonths').value,flipHoldCostMo:$('flipHoldCostMo').value,
+      closingCostPct:$('closingCostPct').value,vacancyPct:$('vacancyPct').value,mgmtPct:$('mgmtPct').value,
+      capexPct:$('capexPct').value,rentGrowth:$('rentGrowth').value,appreciation:$('appreciation').value,
+      numUnits:numUnits,units:units
+    };
+    try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}catch(e){}
+    var n=$('saveNotice');n.classList.add('show');setTimeout(function(){n.classList.remove('show')},1500);
+  },800);
+}
+function loadFromLocal(){
+  try{
+    var raw=localStorage.getItem(SAVE_KEY);if(!raw)return;
+    var d=JSON.parse(raw);
+    if(d.addrStreet)$('addrStreet').value=d.addrStreet;
+    if(d.addrUnit)$('addrUnit').value=d.addrUnit;
+    if(d.addrCity)$('addrCity').value=d.addrCity;
+    if(d.addrState)$('addrState').value=d.addrState;
+    if(d.addrZip)$('addrZip').value=d.addrZip;
+    var fields=['purchasePrice','rehabBudget','arv','sqft','costPerSqft','monthlyInsurance','monthlyTax',
+      'sellCostPct','downPct','bhRate','bhTermYears','refiRate','refiLtv','refiTermYears','ioYears',
+      'hmRate','hmPoints','hmLtc','hmTermMonths','flipHoldMonths','flipHoldCostMo',
+      'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation'];
+    for(var i=0;i<fields.length;i++){if(d[fields[i]]!=null)$(fields[i]).value=d[fields[i]]}
+    if(d.rehabMode&&d.rehabMode!==rehabMode){rehabMode=d.rehabMode;
+      document.querySelectorAll('.rehab-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')===rehabMode)});
+      $('rehabTotal').style.display=rehabMode==='total'?'block':'none';$('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';updRehab();}
+    if(d.useIO){useIO=true;$('ioToggle').classList.add('on');$('ioFields').style.display='block'}
+    if(d.useHM){useHM=true;$('hmToggle').classList.add('on');$('hmFields').classList.add('show')}
+    if(d.numUnits){numUnits=d.numUnits;if(d.units)units=d.units;buildCards();}
+  }catch(e){}
+}
+// Attach auto-save to all inputs
+document.querySelectorAll('input[type="number"],input[type="text"]').forEach(function(inp){inp.addEventListener('input',saveToLocal)});
+document.querySelectorAll('.rehab-opt,.type-opt,.tog-btn,.step-btn').forEach(function(btn){btn.addEventListener('click',function(){setTimeout(saveToLocal,100)})});
 
 // ─── Init ────────────────────────────────────────────────────
 loadFromLocal();
