@@ -6,119 +6,204 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Quick RE Analyzer">
-<title>Quick Real Estate Analyzer</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231E40AF'/%3E%3Cpath d='M16 7L5 16h3v9h6v-6h4v6h6v-9h3L16 7z' fill='white'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%231E40AF'/%3E%3Cpath d='M90 40L28 90h17v52h34v-34h22v34h34V90h17L90 40z' fill='white'/%3E%3C/svg%3E">
+<meta name="description" content="Free real estate deal analyzer. Compare Buy &amp; Hold, BRRRR, and Flip strategies side by side. Get Cash-on-Cash, IRR, MOIC, pro forma, and sensitivity analysis instantly — no signup required.">
+<meta property="og:title" content="Quick Real Estate Analyzer — Free BRRRR, Buy &amp; Hold &amp; Flip Calculator">
+<meta property="og:description" content="Analyze any real estate deal across 3 strategies in 60 seconds. Free, no signup required.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quickreanalyzer.com">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232C3437'/%3E%3Cpath d='M16 7L5 16h3v9h6v-6h4v6h6v-9h3L16 7z' fill='white'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%232C3437'/%3E%3Cpath d='M90 40L28 90h17v52h34v-34h22v34h34V90h17L90 40z' fill='white'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://quickreanalyzer.com">
+<title>Quick Real Estate Analyzer — Free BRRRR, Buy &amp; Hold &amp; Flip Calculator</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Quick Real Estate Analyzer","url":"https://quickreanalyzer.com","description":"Free real estate deal analyzer comparing Buy & Hold, BRRRR, and Flip strategies with Cash-on-Cash, IRR, MOIC, pro forma, and sensitivity analysis.","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"browserRequirements":"Requires JavaScript"}
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro','Helvetica Neue',sans-serif;background:#F3F4F6;min-height:100vh;margin:0 auto;cursor:pointer}
-.header{background:linear-gradient(135deg,#1E40AF,#3B82F6);padding:24px 20px 18px;color:#fff;position:sticky;top:0;z-index:10}
+body{font-family:Georgia,'Times New Roman',serif;background:#F2EDE3;min-height:100vh;margin:0 auto;cursor:pointer;color:#2C3437}
+.nav{background:#2C3437;padding:0 20px;position:sticky;top:0;z-index:20}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:52px}
+.nav-brand{color:#F2EDE3;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:1px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:#B5A99A;font-size:12px;font-weight:600;text-decoration:none;transition:color 0.2s;letter-spacing:0.5px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.nav-links a:hover,.nav-links a.active{color:#F2EDE3}
+.nav-toggle{display:none;background:none;border:none;color:#F2EDE3;font-size:22px;cursor:pointer;padding:4px}
+.hero{background:#2C3437;padding:56px 20px;text-align:center;color:#F2EDE3}
+.hero-inner{max-width:680px;margin:0 auto}
+.hero h1{font-size:30px;font-weight:400;letter-spacing:-0.3px;line-height:1.4;margin-bottom:16px;font-family:Georgia,'Times New Roman',serif}
+.hero p{font-size:15px;opacity:0.8;line-height:1.7;margin-bottom:28px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.hero-features{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:32px}
+.hero-feat{font-size:12px;font-weight:600;opacity:0.7;letter-spacing:0.5px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.hero-cta{display:inline-block;background:#F2EDE3;color:#2C3437;padding:14px 36px;border-radius:4px;font-weight:700;font-size:13px;text-decoration:none;letter-spacing:0.5px;text-transform:uppercase;transition:all 0.2s;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.hero-cta:hover{background:#fff;transform:translateY(-1px)}
+.header{background:#546070;padding:18px 20px 14px;color:#F2EDE3}
 .header-inner{max-width:960px;margin:0 auto}
-.header h1{font-size:21px;font-weight:800;letter-spacing:-0.5px}
-.header p{font-size:12px;opacity:0.8;margin-top:2px}
-.content{padding:16px 16px 60px;max-width:960px;margin:0 auto}
+.header h1{font-size:20px;font-weight:400;letter-spacing:0.5px}
+.header p{font-size:12px;opacity:0.7;margin-top:2px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.content{padding:20px 16px 60px;max-width:960px;margin:0 auto}
 .desktop-layout{display:flex;gap:24px;align-items:flex-start}
 .desktop-left{flex:1;min-width:0}
-.desktop-right{flex:1;min-width:0;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto}
+.desktop-right{flex:1;min-width:0;position:sticky;top:72px;max-height:calc(100vh - 84px);overflow-y:auto}
+.footer{background:#2C3437;color:#B5A99A;padding:36px 20px;margin-top:40px;font-size:13px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.footer-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px}
+.footer-col h4{color:#F2EDE3;font-size:13px;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.footer-col a{color:#B5A99A;text-decoration:none;display:block;line-height:2}
+.footer-col a:hover{color:#F2EDE3}
+.footer-copy{max-width:960px;margin:16px auto 0;padding-top:16px;border-top:1px solid #43474B;font-size:11px;color:#7B7368}
+.share-btn{background:#546070;box-shadow:none}.share-btn:active{background:#43474B}
+.share-toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#5C7A61;color:#F2EDE3;padding:10px 24px;border-radius:4px;font-size:13px;font-weight:600;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:100;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.share-toast.show{opacity:1}
+.email-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(44,52,55,0.6);z-index:50;align-items:center;justify-content:center}
+.email-overlay.show{display:flex}
+.email-modal{background:#F9F5EC;border-radius:8px;padding:28px;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.25)}
+.email-modal h3{font-size:18px;font-weight:400;color:#2C3437;margin-bottom:6px;font-family:Georgia,'Times New Roman',serif}
+.email-modal p{font-size:13px;color:#5B6568;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.email-modal input[type="email"]{width:100%;padding:12px;border:1px solid #D4C9B5;border-radius:4px;font-size:15px;font-family:inherit;margin-bottom:12px;outline:none;background:#fff}
+.email-modal input[type="email"]:focus{border-color:#546070;box-shadow:0 0 0 3px rgba(84,96,112,0.1)}
+.email-submit{width:100%;padding:12px;background:#546070;color:#F2EDE3;border:none;border-radius:4px;font-size:13px;font-weight:700;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase}
+.email-skip{display:block;width:100%;text-align:center;background:none;border:none;color:#B5A99A;font-size:13px;cursor:pointer;padding:8px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.save-notice{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#5C7A61;color:#F2EDE3;padding:8px 20px;border-radius:4px;font-size:13px;font-weight:600;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:100;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.save-notice.show{opacity:1}
 @media(max-width:768px){
   .content{max-width:480px}
-  .header{border-radius:0 0 24px 24px}
   .desktop-layout{flex-direction:column}
   .desktop-right{position:static;max-height:none;overflow-y:visible}
+  .hero h1{font-size:24px}
+  .hero p{font-size:14px}
+  .hero{padding:36px 16px}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:#2C3437;flex-direction:column;padding:12px 20px;gap:0;border-top:1px solid #43474B}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:10px 0;display:block}
+  .nav-toggle{display:block}
+  .footer-inner{flex-direction:column;gap:16px}
 }
 .section{margin-bottom:16px}
 .sec-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 0;background:none;border:none;cursor:pointer;-webkit-appearance:none;appearance:none;font-family:inherit;touch-action:manipulation}
-.sec-btn span:first-child{font-size:15px;font-weight:700;color:#1F2937}
-.arrow{font-size:18px;color:#9CA3AF;transition:transform 0.2s;display:inline-block}
+.sec-btn span:first-child{font-size:15px;font-weight:700;color:#2C3437;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.arrow{font-size:18px;color:#B5A99A;transition:transform 0.2s;display:inline-block}
 .sec-body{overflow:hidden;max-height:0;transition:max-height 0.3s ease}
 .sec-body.open{max-height:8000px}
 .field{margin-bottom:12px}
-.field label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
-.help{font-weight:400;color:#9CA3AF;margin-left:6px;font-size:11px}
-.iw{display:flex;align-items:center;border:1px solid #D1D5DB;border-radius:10px;overflow:hidden;background:#fff}
-.iw .pre{padding:8px 0 8px 12px;color:#9CA3AF;font-size:15px;user-select:none}
-.iw input[type="number"],.iw input[type="text"]{flex:1;border:none;outline:none;padding:10px 8px;font-size:16px;background:transparent;width:100%;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0}
-.iw .suf{padding:8px 12px 8px 0;color:#9CA3AF;font-size:13px;user-select:none;white-space:nowrap}
+.field label{display:block;font-size:12px;font-weight:600;color:#2C3437;margin-bottom:4px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;text-transform:uppercase;letter-spacing:0.3px}
+.help{font-weight:400;color:#B5A99A;margin-left:6px;font-size:11px;text-transform:none;letter-spacing:0}
+.iw{display:flex;align-items:center;border:1px solid #D4C9B5;border-radius:4px;overflow:hidden;background:#fff}
+.iw .pre{padding:8px 0 8px 12px;color:#B5A99A;font-size:15px;user-select:none}
+.iw input[type="number"],.iw input[type="text"]{flex:1;border:none;outline:none;padding:10px 8px;font-size:16px;background:transparent;width:100%;min-width:0;-webkit-appearance:none;appearance:none;border-radius:0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.iw .suf{padding:8px 12px 8px 0;color:#B5A99A;font-size:13px;user-select:none;white-space:nowrap}
 .tog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.tog-row span{font-size:13px;font-weight:600;color:#374151}
-.tog-btn{width:48px;height:28px;border-radius:14px;padding:2px;cursor:pointer;background:#D1D5DB;transition:background 0.2s;position:relative;flex-shrink:0;border:none;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.tog-btn.on{background:#2563EB}
-.tog-k{width:24px;height:24px;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:transform 0.2s;pointer-events:none}
+.tog-row span{font-size:12px;font-weight:600;color:#2C3437;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;text-transform:uppercase;letter-spacing:0.3px}
+.tog-btn{width:48px;height:28px;border-radius:14px;padding:2px;cursor:pointer;background:#D4C9B5;transition:background 0.2s;position:relative;flex-shrink:0;border:none;-webkit-appearance:none;appearance:none;touch-action:manipulation}
+.tog-btn.on{background:#546070}
+.tog-k{width:24px;height:24px;border-radius:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.15);transition:transform 0.2s;pointer-events:none}
 .tog-btn.on .tog-k{transform:translateX(20px)}
 .hm-fields{display:none}.hm-fields.show{display:block}
-.action-btn{display:block;width:100%;color:#fff;text-align:center;padding:14px 20px;border-radius:12px;cursor:pointer;font-weight:700;font-size:14px;font-family:inherit;margin-bottom:12px;border:none;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.calc-btn{background:#059669;box-shadow:0 2px 8px rgba(5,150,105,0.3)}.calc-btn:active{background:#047857}
-.pf-btn{background:#1E40AF;box-shadow:0 2px 8px rgba(30,64,175,0.3)}.pf-btn:active{background:#1E3A8A}
-.dl-btn{background:#7C3AED;box-shadow:0 2px 8px rgba(124,58,237,0.3)}.dl-btn:active{background:#6D28D9}
-.sa-btn{background:#D97706;box-shadow:0 2px 8px rgba(217,119,6,0.3)}.sa-btn:active{background:#B45309}
+.action-btn{display:block;width:100%;color:#F2EDE3;text-align:center;padding:14px 20px;border-radius:4px;cursor:pointer;font-weight:700;font-size:12px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;margin-bottom:12px;border:none;-webkit-appearance:none;appearance:none;touch-action:manipulation;letter-spacing:0.5px;text-transform:uppercase}
+.calc-btn{background:#5C7A61;box-shadow:none}.calc-btn:active{background:#4A6650}
+.pf-btn{background:#546070;box-shadow:none}.pf-btn:active{background:#43474B}
+.dl-btn{background:#2C3437;box-shadow:none}.dl-btn:active{background:#1D2224}
+.sa-btn{background:#8B7355;box-shadow:none}.sa-btn:active{background:#7A6449}
 .mg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
-.mc{background:#fff;border-radius:14px;padding:16px 14px;flex:1 1 45%;min-width:140px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #E5E7EB}
-.ml{font-size:12px;color:#6B7280;font-weight:500;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.mv{font-size:22px;font-weight:700}
-.ms{font-size:11px;color:#9CA3AF;margin-top:2px}
-.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);border:1px solid #E5E7EB}
-.ct{font-size:14px;font-weight:700;color:#1F2937;margin-bottom:10px}
-.row{display:flex;justify-content:space-between;font-size:13px;color:#4B5563;line-height:1.8}
+.mc{background:#F9F5EC;border-radius:8px;padding:16px 14px;flex:1 1 45%;min-width:140px;box-shadow:none;border:1px solid #E8E3D8}
+.ml{font-size:11px;color:#7B7368;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.mv{font-size:22px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.ms{font-size:11px;color:#B5A99A;margin-top:2px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.card{background:#F9F5EC;border-radius:8px;padding:16px;margin-bottom:16px;box-shadow:none;border:1px solid #E8E3D8}
+.ct{font-size:14px;font-weight:700;color:#2C3437;margin-bottom:10px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.row{display:flex;justify-content:space-between;font-size:13px;color:#5B6568;line-height:1.8;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
 .row .v{font-weight:600}
-.divr{border-top:1px solid #E5E7EB;padding-top:6px;margin-top:6px}
-.hlr{display:flex;justify-content:space-between;background:#EFF6FF;margin:8px -16px -16px;padding:10px 16px;border-radius:0 0 14px 14px;font-weight:700;font-size:14px;color:#1E40AF}
+.divr{border-top:1px solid #E8E3D8;padding-top:6px;margin-top:6px}
+.hlr{display:flex;justify-content:space-between;background:#2C3437;margin:8px -16px -16px;padding:10px 16px;border-radius:0 0 8px 8px;font-weight:700;font-size:14px;color:#F2EDE3;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
 .pfw{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:620px}
-th{padding:8px 6px;text-align:right;font-weight:700;color:#374151;white-space:nowrap;border-bottom:2px solid #E5E7EB}
-td{padding:6px;text-align:right;border-bottom:1px solid #F3F4F6}
-td.yr{text-align:center;font-weight:700;color:#6B7280}
-.pfn{font-size:11px;color:#9CA3AF;margin-top:8px;text-align:center}
-.grn{color:#059669}.red{color:#DC2626}.blu{color:#1E40AF}.amb{color:#D97706}
+th{padding:8px 6px;text-align:right;font-weight:700;color:#2C3437;white-space:nowrap;border-bottom:2px solid #D4C9B5;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:11px}
+td{padding:6px;text-align:right;border-bottom:1px solid #E8E3D8;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;font-size:12px}
+td.yr{text-align:center;font-weight:700;color:#7B7368}
+.pfn{font-size:11px;color:#B5A99A;margin-top:8px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.grn{color:#5C7A61}.red{color:#A4574B}.blu{color:#546070}.amb{color:#8B7355}
 #results{display:none}#results.show{display:block}
-.unit-card{background:#fff;border:1px solid #E5E7EB;border-radius:10px;padding:12px;margin-bottom:10px}
+.unit-card{background:#F9F5EC;border:1px solid #E8E3D8;border-radius:8px;padding:12px;margin-bottom:10px}
 .unit-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.unit-hdr span{font-size:14px;font-weight:700;color:#1F2937}
-.type-toggle{display:flex;border-radius:8px;overflow:hidden;border:1px solid #D1D5DB}
-.type-opt{padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:#6B7280;border:none;font-family:inherit;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.type-opt.active{background:#2563EB;color:#fff}
+.unit-hdr span{font-size:14px;font-weight:700;color:#2C3437;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.type-toggle{display:flex;border-radius:4px;overflow:hidden;border:1px solid #D4C9B5}
+.type-opt{padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:#F9F5EC;color:#7B7368;border:none;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;-webkit-appearance:none;appearance:none;touch-action:manipulation}
+.type-opt.active{background:#546070;color:#F2EDE3}
 .unit-fields{margin-top:4px}
 .unit-fields-row{display:flex;gap:8px}
 .unit-fields-row .field{flex:1;margin-bottom:8px}
 .unit-stepper{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.step-btn{width:36px;height:36px;border-radius:18px;border:2px solid #D1D5DB;background:#fff;font-size:20px;font-weight:700;color:#374151;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;font-family:inherit;line-height:1}
-.step-btn:active{background:#E5E7EB}
-.unit-count{font-size:18px;font-weight:700;color:#1F2937;min-width:30px;text-align:center}
-.addr-input{width:100%;border:1px solid #D1D5DB;border-radius:10px;padding:10px 12px;font-size:16px;font-family:inherit;background:#fff;-webkit-appearance:none;appearance:none;outline:none}
-.addr-input:focus{border-color:#3B82F6;box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
-.rehab-toggle,.strat-tabs{display:flex;border-radius:8px;overflow:hidden;border:1px solid #D1D5DB;margin-bottom:12px}
-.rehab-opt{padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#6B7280;border:none;font-family:inherit;flex:1;text-align:center;-webkit-appearance:none;appearance:none;touch-action:manipulation}
-.rehab-opt.active{background:#2563EB;color:#fff}
-.strat-tabs{margin-bottom:16px;border:2px solid #1E40AF}
-.strat-tab{padding:10px 8px;font-size:13px;font-weight:700;cursor:pointer;background:#fff;color:#6B7280;border:none;font-family:inherit;flex:1;text-align:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;transition:all 0.2s}
-.strat-tab.active{background:#1E40AF;color:#fff}
+.step-btn{width:36px;height:36px;border-radius:18px;border:2px solid #D4C9B5;background:#F9F5EC;font-size:20px;font-weight:700;color:#2C3437;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;font-family:inherit;line-height:1}
+.step-btn:active{background:#E8E3D8}
+.unit-count{font-size:18px;font-weight:700;color:#2C3437;min-width:30px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.addr-input{width:100%;border:1px solid #D4C9B5;border-radius:4px;padding:10px 12px;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:#fff;-webkit-appearance:none;appearance:none;outline:none}
+.addr-input:focus{border-color:#546070;box-shadow:0 0 0 3px rgba(84,96,112,0.1)}
+.rehab-toggle,.strat-tabs{display:flex;border-radius:4px;overflow:hidden;border:1px solid #D4C9B5;margin-bottom:12px}
+.rehab-opt{padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;background:#F9F5EC;color:#7B7368;border:none;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;flex:1;text-align:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;text-transform:uppercase;letter-spacing:0.3px}
+.rehab-opt.active{background:#546070;color:#F2EDE3}
+.strat-tabs{margin-bottom:16px;border:2px solid #2C3437}
+.strat-tab{padding:10px 8px;font-size:12px;font-weight:700;cursor:pointer;background:#F9F5EC;color:#7B7368;border:none;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;flex:1;text-align:center;-webkit-appearance:none;appearance:none;touch-action:manipulation;transition:all 0.2s;text-transform:uppercase;letter-spacing:0.3px}
+.strat-tab.active{background:#2C3437;color:#F2EDE3}
 .strat-panel{display:none}.strat-panel.active{display:block}
 .sens-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:auto}
-.sens-tbl th{padding:6px 4px;text-align:center;font-size:10px;border-bottom:2px solid #E5E7EB;white-space:nowrap}
-.sens-tbl td{padding:5px 4px;text-align:center;border-bottom:1px solid #F3F4F6;font-weight:600}
-.sens-tbl td.base{background:#EFF6FF;font-weight:800}
-.sens-tbl td:first-child{text-align:left;font-weight:700;color:#6B7280;font-size:10px}
-.io-label{font-size:11px;color:#9CA3AF;font-style:italic;margin-top:-4px;margin-bottom:8px}
-.str-calc{font-size:12px;color:#059669;font-weight:700;padding:4px 0 4px 0}
-.flip-profit{font-size:28px;font-weight:800;text-align:center;margin:8px 0}
+.sens-tbl th{padding:6px 4px;text-align:center;font-size:10px;border-bottom:2px solid #E8E3D8;white-space:nowrap}
+.sens-tbl td{padding:5px 4px;text-align:center;border-bottom:1px solid #F2EDE3;font-weight:600}
+.sens-tbl td.base{background:#E8E3D8;font-weight:800}
+.sens-tbl td:first-child{text-align:left;font-weight:700;color:#7B7368;font-size:10px}
+.io-label{font-size:11px;color:#B5A99A;font-style:italic;margin-top:-4px;margin-bottom:8px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.str-calc{font-size:12px;color:#5C7A61;font-weight:700;padding:4px 0 4px 0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.flip-profit{font-size:28px;font-weight:800;text-align:center;margin:8px 0;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
 .addr-row{display:flex;gap:8px}
 .addr-row .field{flex:1;margin-bottom:8px}
-.addr-err{border-color:#DC2626 !important;box-shadow:0 0 0 3px rgba(220,38,38,0.15) !important}
-.err-msg{font-size:11px;color:#DC2626;font-weight:600;margin-bottom:8px;display:none}
+.addr-err{border-color:#A4574B !important;box-shadow:0 0 0 3px rgba(164,87,75,0.12) !important}
+.err-msg{font-size:11px;color:#A4574B;font-weight:600;margin-bottom:8px;display:none;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
 .err-msg.show{display:block}
-.req{color:#DC2626;margin-left:2px}
-.save-notice{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#059669;color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:100}
-.save-notice.show{opacity:1}
+.req{color:#A4574B;margin-left:2px}
+.lookup-btn{display:block;width:100%;padding:10px;background:#F9F5EC;border:1px solid #D4C9B5;border-radius:4px;color:#546070;font-size:12px;font-weight:700;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;margin-bottom:12px;transition:all 0.2s;-webkit-appearance:none;appearance:none;touch-action:manipulation;letter-spacing:0.3px;text-transform:uppercase}
+.lookup-btn:hover{background:#E8E3D8}
+.lookup-btn:active{background:#D4C9B5}
+.lookup-btn:disabled{opacity:0.5;cursor:not-allowed}
+.lookup-note{font-size:11px;color:#B5A99A;font-style:italic;margin:-4px 0 12px;line-height:1.4;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.lookup-result{font-size:12px;color:#5C7A61;font-weight:600;margin:-4px 0 12px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.lookup-err{font-size:12px;color:#A4574B;font-weight:600;margin:-4px 0 12px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
 </style>
 </head>
 <body ontouchstart="">
 
-<div class="header">
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Quick RE Analyzer</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu">&#9776;</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/" class="active">Home</a>
+      <a href="#calculator">Calculator</a>
+      <a href="/blog/how-to-analyze-brrrr-deal.html">Blog</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Analyze Any Real Estate Deal Across 3 Strategies in 60 Seconds</h1>
+    <p>Compare Buy &amp; Hold, BRRRR, and Flip side by side with Cash-on-Cash, IRR, MOIC, 10-year pro forma, and sensitivity analysis. Free, no signup required.</p>
+    <div class="hero-features">
+      <span class="hero-feat">&#10003; 3 Strategies</span>
+      <span class="hero-feat">&#10003; 10-Year Pro Forma</span>
+      <span class="hero-feat">&#10003; Sensitivity Analysis</span>
+      <span class="hero-feat">&#10003; Excel Export</span>
+    </div>
+    <a href="#calculator" class="hero-cta">Start Your Analysis</a>
+  </div>
+</section>
+
+<div id="shareToast" class="share-toast">Link copied to clipboard!</div>
+<div id="saveNotice" class="save-notice">Inputs saved</div>
+
+<div class="header" id="calculator">
   <div class="header-inner">
     <h1>Quick Real Estate Analyzer</h1>
     <p>Buy &amp; Hold &middot; BRRRR &middot; Flip</p>
   </div>
 </div>
-<div id="saveNotice" class="save-notice">Inputs saved</div>
 
 <div class="content">
 <div class="desktop-layout">
@@ -153,6 +238,8 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
         <label>ZIP Code<span class="req">*</span></label>
         <input type="text" class="addr-input" id="addrZip" placeholder="12345" inputmode="numeric" maxlength="10">
       </div>
+      <button type="button" class="lookup-btn" id="lookupBtn">&#128269; Estimate Tax &amp; Insurance (State Average)</button>
+      <div id="lookupStatus"></div>
       <div class="field">
         <label>Number of Units</label>
         <div class="unit-stepper">
@@ -205,7 +292,7 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
       <span>Financing</span><span class="arrow" id="arrowFin">›</span>
     </button>
     <div class="sec-body" id="secFin">
-      <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Buy &amp; Hold Loan</div>
+      <div style="font-size:12px;font-weight:700;color:#7B7368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">Buy &amp; Hold Loan</div>
       <div class="field"><label>Down Payment</label>
         <div class="iw"><input type="number" inputmode="decimal" id="downPct" value="20" step="1"><span class="suf">%</span></div></div>
       <div class="field"><label>Mortgage Rate</label>
@@ -213,8 +300,8 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
       <div class="field"><label>Loan Term</label>
         <div class="iw"><input type="number" inputmode="decimal" id="bhTermYears" value="30" step="1"><span class="suf">years</span></div></div>
 
-      <div style="border-top:1px solid #E5E7EB;margin:16px 0;padding-top:16px">
-        <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">BRRRR Refinance</div>
+      <div style="border-top:1px solid #E8E3D8;margin:16px 0;padding-top:16px">
+        <div style="font-size:12px;font-weight:700;color:#7B7368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">BRRRR Refinance</div>
       </div>
       <div class="field"><label>Refinance Rate</label>
         <div class="iw"><input type="number" inputmode="decimal" id="refiRate" value="7.0" step="0.1"><span class="suf">%</span></div></div>
@@ -232,8 +319,8 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
         <div class="io-label">Loan amortizes fully after I/O period</div>
       </div>
 
-      <div style="border-top:1px solid #E5E7EB;margin:16px 0;padding-top:16px">
-        <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Acquisition (BRRRR/Flip)</div>
+      <div style="border-top:1px solid #E8E3D8;margin:16px 0;padding-top:16px">
+        <div style="font-size:12px;font-weight:700;color:#7B7368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">Acquisition (BRRRR/Flip)</div>
       </div>
       <div class="tog-row">
         <span>Use Hard Money / Bridge Loan</span>
@@ -250,8 +337,8 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
           <div class="iw"><input type="number" inputmode="decimal" id="hmTermMonths" value="12" step="1"><span class="suf">months</span></div></div>
       </div>
 
-      <div style="border-top:1px solid #E5E7EB;margin:16px 0;padding-top:16px">
-        <div style="font-size:12px;font-weight:700;color:#6B7280;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Flip Timeline</div>
+      <div style="border-top:1px solid #E8E3D8;margin:16px 0;padding-top:16px">
+        <div style="font-size:12px;font-weight:700;color:#7B7368;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">Flip Timeline</div>
       </div>
       <div class="field"><label>Holding Period</label>
         <div class="iw"><input type="number" inputmode="decimal" id="flipHoldMonths" value="6" step="1"><span class="suf">months</span></div></div>
@@ -359,14 +446,14 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
         <div class="row"><span>− Management</span><span class="v" id="br_mgmt">—</span></div>
         <div class="row"><span>− CapEx Reserve</span><span class="v" id="br_capex">—</span></div>
         <div class="row"><span>− Mortgage</span><span class="v" id="br_mort">—</span></div>
-        <div class="row" id="br_iolabel" style="display:none;color:#D97706;font-style:italic"><span></span><span class="v"></span></div>
+        <div class="row" id="br_iolabel" style="display:none;color:#8B7355;font-style:italic"><span></span><span class="v"></span></div>
         <div class="row divr" style="font-weight:700;font-size:14px"><span>Net Cash Flow</span><span class="v" id="br_ncf">—</span></div>
       </div>
     </div>
 
     <!-- ── FLIP ── -->
     <div class="strat-panel" id="panel_flip">
-      <div class="card" style="text-align:center;background:linear-gradient(135deg,#ECFDF5,#D1FAE5)">
+      <div class="card" style="text-align:center;background:#E8E3D8;border-color:#D4C9B5">
         <div class="ml" style="text-align:center">Estimated Flip Profit</div>
         <div class="flip-profit" id="fl_profit">—</div>
         <div style="display:flex;justify-content:center;gap:20px;margin-top:8px">
@@ -419,12 +506,13 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
     </div>
 
     <button type="button" class="action-btn dl-btn" id="dlBtn">Download Excel Worksheet</button>
+    <button type="button" class="action-btn share-btn" id="shareBtn">Share This Analysis</button>
 
-    <div style="margin-top:20px;padding:16px;background:#FEF3C7;border:1px solid #F59E0B;border-radius:12px">
-      <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:6px">IMPORTANT DISCLAIMER</div>
-      <div style="font-size:11px;color:#78350F;line-height:1.6">This tool is for <strong>informational and educational purposes only</strong> and does not constitute financial, investment, legal, tax, or real estate advice. All projections are hypothetical estimates based on user inputs.</div>
-      <button type="button" class="action-btn" id="discBtn" style="background:#92400E;font-size:12px;padding:10px;margin-top:8px;margin-bottom:0">Read Full Disclaimer</button>
-      <div id="discFull" style="display:none;margin-top:10px;font-size:11px;color:#78350F;line-height:1.6">
+    <div style="margin-top:20px;padding:16px;background:#E8E3D8;border:1px solid #D4C9B5;border-radius:8px">
+      <div style="font-size:11px;font-weight:700;color:#2C3437;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">Important Disclaimer</div>
+      <div style="font-size:11px;color:#5B6568;line-height:1.6;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">This tool is for <strong>informational and educational purposes only</strong> and does not constitute financial, investment, legal, tax, or real estate advice. All projections are hypothetical estimates based on user inputs.</div>
+      <button type="button" class="action-btn" id="discBtn" style="background:#43474B;font-size:11px;padding:10px;margin-top:8px;margin-bottom:0">Read Full Disclaimer</button>
+      <div id="discFull" style="display:none;margin-top:10px;font-size:11px;color:#5B6568;line-height:1.6;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">
         <p style="margin-bottom:8px"><strong>No Warranty.</strong> Projections including CoC, IRR, MOIC, NOI, and all pro forma outputs are estimates only. Actual results will vary materially. Past performance is not indicative of future results.</p>
         <p style="margin-bottom:8px"><strong>Not Professional Advice.</strong> Consult licensed real estate agents, CPAs, financial advisors, and attorneys before making investment decisions. The creators are not licensed professionals.</p>
         <p style="margin-bottom:8px"><strong>Assumption Limitations.</strong> Projections may not reflect actual market conditions. The tool does not account for all risks including environmental hazards, zoning changes, market downturns, tenant defaults, and regulatory changes.</p>
@@ -438,6 +526,43 @@ td.yr{text-align:center;font-weight:700;color:#6B7280}
 </div><!-- end desktop-right -->
 </div><!-- end desktop-layout -->
 </div><!-- end content -->
+
+<!-- Email Capture Modal -->
+<div class="email-overlay" id="emailOverlay">
+  <div class="email-modal">
+    <h3>Get your analysis emailed to you</h3>
+    <p>Enter your email to receive a copy (optional).</p>
+    <form id="emailForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" id="emailInput" placeholder="you@example.com" required>
+      <input type="hidden" name="source" value="Quick RE Analyzer - Excel Download">
+      <input type="hidden" name="address" id="emailAddr">
+      <button type="submit" class="email-submit">Send &amp; Download</button>
+    </form>
+    <button type="button" class="email-skip" id="emailSkip">No thanks, just download</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Quick RE Analyzer</h4>
+      <div style="line-height:1.6">Free real estate deal analysis.<br>Compare Buy &amp; Hold, BRRRR, and Flip strategies.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <a href="/#calculator">Deal Calculator</a>
+      <a href="/blog/how-to-analyze-brrrr-deal.html">BRRRR Guide</a>
+      <a href="/blog/cash-on-cash-return-explained.html">CoC Explained</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="/blog/buy-and-hold-vs-brrrr-vs-flip.html">Strategy Comparison</a>
+      <a href="/blog/our-story.html">Our Story</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+  <div class="footer-copy">&copy; 2026 Quick Real Estate Analyzer. For educational purposes only. Not financial advice.</div>
+</footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
@@ -675,7 +800,7 @@ function analyzeFL(){
 
 // ─── Render helpers ──────────────────────────────────────────
 function setMV(id,val,threshold){var el=$(id);el.textContent=fPct(val);el.className='mv '+(val>threshold?'grn':'red')}
-function unitRentsHtml(rents){var h='';if(numUnits>1)for(var i=0;i<rents.length;i++){var t=units[i].type==='str'?' (STR)':' (LTR)';h+='<div class="row" style="color:#9CA3AF"><span>Unit '+(i+1)+t+'</span><span class="v">'+fmt(rents[i])+'/mo</span></div>'}return h}
+function unitRentsHtml(rents){var h='';if(numUnits>1)for(var i=0;i<rents.length;i++){var t=units[i].type==='str'?' (STR)':' (LTR)';h+='<div class="row" style="color:#B5A99A"><span>Unit '+(i+1)+t+'</span><span class="v">'+fmt(rents[i])+'/mo</span></div>'}return h}
 function fillCF(pre,inp,moMort){
   $(pre+'_unit_rents').innerHTML=unitRentsHtml(inp.rents);
   $(pre+'_gross').textContent=fmt(inp.rent);
@@ -731,6 +856,41 @@ function buildSens(){
   build('saCocTbl','coc');
   build('saIrrTbl','irr');
 }
+
+// ─── State Average Tax & Insurance Rates ────────────────────
+// Tax: effective property tax rate (% of value). Source: US Census / Tax Foundation averages.
+// Ins: avg annual homeowners insurance per $100k of value.
+var STATE_DATA={
+AL:{tax:0.41,ins:430},AK:{tax:1.19,ins:500},AZ:{tax:0.63,ins:420},AR:{tax:0.62,ins:520},
+CA:{tax:0.74,ins:380},CO:{tax:0.51,ins:530},CT:{tax:2.14,ins:420},DE:{tax:0.57,ins:340},
+DC:{tax:0.56,ins:390},FL:{tax:0.89,ins:680},GA:{tax:0.92,ins:450},HI:{tax:0.28,ins:300},
+ID:{tax:0.69,ins:370},IL:{tax:2.27,ins:430},IN:{tax:0.85,ins:380},IA:{tax:1.57,ins:390},
+KS:{tax:1.41,ins:530},KY:{tax:0.86,ins:440},LA:{tax:0.55,ins:620},ME:{tax:1.36,ins:370},
+MD:{tax:1.09,ins:400},MA:{tax:1.23,ins:440},MI:{tax:1.54,ins:400},MN:{tax:1.12,ins:460},
+MS:{tax:0.81,ins:530},MO:{tax:0.97,ins:480},MT:{tax:0.84,ins:420},NE:{tax:1.73,ins:480},
+NV:{tax:0.60,ins:370},NH:{tax:2.18,ins:380},NJ:{tax:2.49,ins:430},NM:{tax:0.80,ins:400},
+NY:{tax:1.72,ins:430},NC:{tax:0.84,ins:410},ND:{tax:0.98,ins:440},OH:{tax:1.56,ins:370},
+OK:{tax:0.90,ins:590},OR:{tax:0.97,ins:350},PA:{tax:1.58,ins:380},RI:{tax:1.63,ins:440},
+SC:{tax:0.57,ins:450},SD:{tax:1.31,ins:450},TN:{tax:0.71,ins:440},TX:{tax:1.80,ins:580},
+UT:{tax:0.63,ins:360},VT:{tax:1.90,ins:380},VA:{tax:0.82,ins:370},WA:{tax:0.98,ins:380},
+WV:{tax:0.58,ins:380},WI:{tax:1.85,ins:360},WY:{tax:0.61,ins:380}
+};
+function estimateTaxIns(e){
+  if(e)e.preventDefault();
+  var state=$('addrState').value.trim().toUpperCase();
+  var pp=parseFloat($('purchasePrice').value)||0;
+  if(!state||state.length!==2){$('lookupStatus').innerHTML='<div class="lookup-err">Enter a 2-letter state code first.</div>';return}
+  if(!STATE_DATA[state]){$('lookupStatus').innerHTML='<div class="lookup-err">State "'+state+'" not recognized. Use a 2-letter code (e.g. TX, CA, FL).</div>';return}
+  if(pp<=0){$('lookupStatus').innerHTML='<div class="lookup-err">Enter a purchase price in Deal Inputs first.</div>';return}
+  var d=STATE_DATA[state];
+  var moTax=Math.round((pp*d.tax/100)/12);
+  var moIns=Math.round((pp/100000*d.ins)/12);
+  $('monthlyTax').value=moTax;$('monthlyTax').dispatchEvent(new Event('input'));
+  $('monthlyInsurance').value=moIns;$('monthlyInsurance').dispatchEvent(new Event('input'));
+  $('lookupStatus').innerHTML='<div class="lookup-result">'+state+' avg: Tax ~$'+moTax+'/mo ('+d.tax+'% rate) &middot; Insurance ~$'+moIns+'/mo &middot; Based on $'+pp.toLocaleString()+' value</div>';
+}
+$('lookupBtn').addEventListener('click',estimateTaxIns,false);
+$('lookupBtn').addEventListener('touchend',function(e){e.preventDefault();estimateTaxIns(e)},false);
 
 // ─── Address Validation ─────────────────────────────────────
 function getFullAddress(){
@@ -890,8 +1050,79 @@ function downloadExcel(e){
   fn+='_'+new Date().toISOString().slice(0,10)+'.xlsx';
   XLSX.writeFile(wb,fn);
 }
-$('dlBtn').addEventListener('click',downloadExcel,false);
-$('dlBtn').addEventListener('touchend',function(e){e.preventDefault();downloadExcel(e)},false);
+// ─── Email Capture on Download ──────────────────────────────
+var emailShown=false;
+function handleDownload(e){
+  if(e)e.preventDefault();
+  if(!lastBH&&!lastBR){alert('Please calculate first.');return}
+  if(!emailShown){
+    emailShown=true;
+    $('emailAddr').value=getFullAddress();
+    $('emailOverlay').classList.add('show');
+    return;
+  }
+  downloadExcel();
+}
+$('dlBtn').addEventListener('click',handleDownload,false);
+$('dlBtn').addEventListener('touchend',function(e){e.preventDefault();handleDownload(e)},false);
+$('emailSkip').addEventListener('click',function(e){e.preventDefault();$('emailOverlay').classList.remove('show');downloadExcel()},false);
+$('emailForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var fd=new FormData(this);
+  fetch(this.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).catch(function(){});
+  $('emailOverlay').classList.remove('show');
+  downloadExcel();
+});
+
+// ─── Share Analysis ─────────────────────────────────────────
+function shareAnalysis(e){
+  if(e)e.preventDefault();
+  saveUD();
+  var params=new URLSearchParams();
+  var fields={pp:'purchasePrice',rh:'rehabBudget',arv:'arv',ins:'monthlyInsurance',tx:'monthlyTax',
+    sc:'sellCostPct',dp:'downPct',br:'bhRate',bt:'bhTermYears',rr:'refiRate',rl:'refiLtv',
+    rt:'refiTermYears',iy:'ioYears',hr:'hmRate',hp:'hmPoints',hl:'hmLtc',ht:'hmTermMonths',
+    fh:'flipHoldMonths',fc:'flipHoldCostMo',cc:'closingCostPct',vp:'vacancyPct',mp:'mgmtPct',
+    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',sf:'sqft',cs:'costPerSqft'};
+  for(var k in fields)params.set(k,$(fields[k]).value);
+  params.set('st',$('addrStreet').value);params.set('un',$('addrUnit').value);
+  params.set('ci',$('addrCity').value);params.set('sa',$('addrState').value);params.set('zp',$('addrZip').value);
+  if(useIO)params.set('io','1');if(useHM)params.set('hm','1');
+  params.set('nu',numUnits);
+  for(var i=0;i<numUnits;i++){var u=units[i];params.set('u'+i,u.type+','+u.rent+','+u.nightly+','+u.occ+','+u.furnish)}
+  if(rehabMode==='sqft')params.set('rm','sqft');
+  var url=window.location.origin+window.location.pathname+'?'+params.toString();
+  navigator.clipboard.writeText(url).then(function(){
+    var t=$('shareToast');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500);
+  }).catch(function(){prompt('Copy this link:',url)});
+}
+$('shareBtn').addEventListener('click',shareAnalysis,false);
+$('shareBtn').addEventListener('touchend',function(e){e.preventDefault();shareAnalysis(e)},false);
+
+// ─── Load from URL params ───────────────────────────────────
+function loadFromURL(){
+  var p=new URLSearchParams(window.location.search);
+  if(!p.has('pp'))return false;
+  var fields={pp:'purchasePrice',rh:'rehabBudget',arv:'arv',ins:'monthlyInsurance',tx:'monthlyTax',
+    sc:'sellCostPct',dp:'downPct',br:'bhRate',bt:'bhTermYears',rr:'refiRate',rl:'refiLtv',
+    rt:'refiTermYears',iy:'ioYears',hr:'hmRate',hp:'hmPoints',hl:'hmLtc',ht:'hmTermMonths',
+    fh:'flipHoldMonths',fc:'flipHoldCostMo',cc:'closingCostPct',vp:'vacancyPct',mp:'mgmtPct',
+    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',sf:'sqft',cs:'costPerSqft'};
+  for(var k in fields)if(p.has(k))$(fields[k]).value=p.get(k);
+  if(p.has('st'))$('addrStreet').value=p.get('st');
+  if(p.has('un'))$('addrUnit').value=p.get('un');
+  if(p.has('ci'))$('addrCity').value=p.get('ci');
+  if(p.has('sa'))$('addrState').value=p.get('sa');
+  if(p.has('zp'))$('addrZip').value=p.get('zp');
+  if(p.get('io')==='1'){useIO=true;$('ioToggle').classList.add('on');$('ioFields').style.display='block'}
+  if(p.get('hm')==='1'){useHM=true;$('hmToggle').classList.add('on');$('hmFields').classList.add('show')}
+  if(p.get('rm')==='sqft'){rehabMode='sqft';document.querySelectorAll('.rehab-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')==='sqft')});$('rehabTotal').style.display='none';$('rehabSqft').style.display='block';updRehab()}
+  if(p.has('nu')){numUnits=parseInt(p.get('nu'))||1;units=[];
+    for(var i=0;i<numUnits;i++){if(p.has('u'+i)){var parts=p.get('u'+i).split(',');units.push({type:parts[0]||'ltr',rent:parseFloat(parts[1])||1800,nightly:parseFloat(parts[2])||150,occ:parseFloat(parts[3])||70,furnish:parseFloat(parts[4])||0})}else{units.push({type:'ltr',rent:1800,nightly:150,occ:70,furnish:0})}}
+    buildCards();
+  }
+  return true;
+}
 
 // ─── Data Persistence ────────────────────────────────────────
 var SAVE_KEY='qrea_data_v1';
@@ -928,26 +1159,38 @@ function loadFromLocal(){
     if(d.addrCity)$('addrCity').value=d.addrCity;
     if(d.addrState)$('addrState').value=d.addrState;
     if(d.addrZip)$('addrZip').value=d.addrZip;
-    var fields=['purchasePrice','rehabBudget','arv','sqft','costPerSqft','monthlyInsurance','monthlyTax',
+    var flds=['purchasePrice','rehabBudget','arv','sqft','costPerSqft','monthlyInsurance','monthlyTax',
       'sellCostPct','downPct','bhRate','bhTermYears','refiRate','refiLtv','refiTermYears','ioYears',
       'hmRate','hmPoints','hmLtc','hmTermMonths','flipHoldMonths','flipHoldCostMo',
       'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation'];
-    for(var i=0;i<fields.length;i++){if(d[fields[i]]!=null)$(fields[i]).value=d[fields[i]]}
+    for(var i=0;i<flds.length;i++){if(d[flds[i]]!=null)$(flds[i]).value=d[flds[i]]}
     if(d.rehabMode&&d.rehabMode!==rehabMode){rehabMode=d.rehabMode;
       document.querySelectorAll('.rehab-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')===rehabMode)});
-      $('rehabTotal').style.display=rehabMode==='total'?'block':'none';$('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';updRehab();}
+      $('rehabTotal').style.display=rehabMode==='total'?'block':'none';$('rehabSqft').style.display=rehabMode==='sqft'?'block':'none';updRehab()}
     if(d.useIO){useIO=true;$('ioToggle').classList.add('on');$('ioFields').style.display='block'}
     if(d.useHM){useHM=true;$('hmToggle').classList.add('on');$('hmFields').classList.add('show')}
-    if(d.numUnits){numUnits=d.numUnits;if(d.units)units=d.units;buildCards();}
+    if(d.numUnits){numUnits=d.numUnits;if(d.units)units=d.units;buildCards()}
   }catch(e){}
 }
-// Attach auto-save to all inputs
 document.querySelectorAll('input[type="number"],input[type="text"]').forEach(function(inp){inp.addEventListener('input',saveToLocal)});
 document.querySelectorAll('.rehab-opt,.type-opt,.tog-btn,.step-btn').forEach(function(btn){btn.addEventListener('click',function(){setTimeout(saveToLocal,100)})});
 
+// ─── Nav Toggle ─────────────────────────────────────────────
+$('navToggle').addEventListener('click',function(e){e.preventDefault();$('navLinks').classList.toggle('open')});
+
+// ─── Smooth Scroll ──────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var t=document.querySelector(this.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});$('navLinks').classList.remove('open')}
+  });
+});
+
 // ─── Init ────────────────────────────────────────────────────
-loadFromLocal();
+var fromURL=loadFromURL();
+if(!fromURL)loadFromLocal();
 buildCards();
+if(fromURL)setTimeout(function(){calculate()},200);
 })();
 </script>
 </body>
