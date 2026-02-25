@@ -2,7 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://quickreanalyzer.com/</loc>
-    <lastmod>2026-02-23</lastmod>
+    <lastmod>2026-02-25</lastmod>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://quickreanalyzer.com/about.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://quickreanalyzer.com/blog/how-to-analyze-brrrr-deal.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://quickreanalyzer.com/blog/cash-on-cash-return-explained.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://quickreanalyzer.com/blog/buy-and-hold-vs-brrrr-vs-flip.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://quickreanalyzer.com/blog/our-story.html</loc>
+    <lastmod>2026-02-25</lastmod>
+    <priority>0.8</priority>
   </url>
 </urlset>
