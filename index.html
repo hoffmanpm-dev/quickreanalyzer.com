@@ -101,6 +101,8 @@ body{font-family:Georgia,'Times New Roman',serif;background:#F2EDE3;min-height:1
 .calc-btn{background:#5C7A61;box-shadow:none}.calc-btn:active{background:#4A6650}
 .pf-btn{background:#546070;box-shadow:none}.pf-btn:active{background:#43474B}
 .dl-btn{background:#2C3437;box-shadow:none}.dl-btn:active{background:#1D2224}
+.pdf-btn{background:#546070;box-shadow:none}.pdf-btn:active{background:#43474B}
+.export-row{display:flex;gap:10px;margin-bottom:12px}.export-row .action-btn{flex:1;margin-bottom:0}
 .sa-btn{background:#8B7355;box-shadow:none}.sa-btn:active{background:#7A6449}
 .mg{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
 .mc{background:#F9F5EC;border-radius:8px;padding:16px 14px;flex:1 1 45%;min-width:140px;box-shadow:none;border:1px solid #E8E3D8}
@@ -238,8 +240,6 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
         <label>ZIP Code<span class="req">*</span></label>
         <input type="text" class="addr-input" id="addrZip" placeholder="12345" inputmode="numeric" maxlength="10">
       </div>
-      <button type="button" class="lookup-btn" id="lookupBtn">&#128269; Estimate Tax &amp; Insurance (State Average)</button>
-      <div id="lookupStatus"></div>
       <div class="field">
         <label>Number of Units</label>
         <div class="unit-stepper">
@@ -277,6 +277,8 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
       </div>
       <div class="field"><label>After Repair Value (ARV)</label>
         <div class="iw"><span class="pre">$</span><input type="number" inputmode="decimal" id="arv" value="200000" step="1000"></div></div>
+      <button type="button" class="lookup-btn" id="lookupBtn">&#128269; Estimate Tax &amp; Insurance (State Average)</button>
+      <div id="lookupStatus"></div>
       <div class="field"><label>Monthly Insurance</label>
         <div class="iw"><span class="pre">$</span><input type="number" inputmode="decimal" id="monthlyInsurance" value="150" step="10"></div></div>
       <div class="field"><label>Monthly Property Tax</label>
@@ -505,7 +507,10 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
       <div class="pfn">Rows = vacancy shifts, Columns = rent shifts from base</div>
     </div>
 
-    <button type="button" class="action-btn dl-btn" id="dlBtn">Download Excel Worksheet</button>
+    <div class="export-row">
+      <button type="button" class="action-btn dl-btn" id="dlBtn">Export Excel</button>
+      <button type="button" class="action-btn pdf-btn" id="pdfBtn">Export PDF</button>
+    </div>
     <button type="button" class="action-btn share-btn" id="shareBtn">Share This Analysis</button>
 
     <div style="margin-top:20px;padding:16px;background:#E8E3D8;border:1px solid #D4C9B5;border-radius:8px">
@@ -565,6 +570,8 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
 </footer>
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <script>
 (function(){
@@ -970,86 +977,308 @@ function calculate(e){
 $('calcBtn').addEventListener('click',calculate,false);
 $('calcBtn').addEventListener('touchend',function(e){e.preventDefault();calculate(e)},false);
 
-// ─── Excel Download ──────────────────────────────────────────
+// ─── Shared export helpers ───────────────────────────────────
+function getExportFilename(ext){
+  var fn='RE_Analysis';
+  var streetName=$('addrStreet').value.trim();
+  if(streetName)fn=streetName.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').substring(0,40);
+  return fn+'_'+new Date().toISOString().slice(0,10)+'.'+ext;
+}
+
+// ─── Excel Download (Enhanced) ──────────────────────────────
 function downloadExcel(e){
   if(e)e.preventDefault();
   if(!lastBH&&!lastBR){alert('Please calculate first.');return}
   var wb=XLSX.utils.book_new();
   var addr=getFullAddress();
+  saveUD();var rents=getRents();
 
-  // Summary
   var s=[];
-  s.push(['Quick Real Estate Analysis']);
-  s.push(['Generated',new Date().toLocaleDateString()]);
-  if(addr){
-    s.push(['Property Address',addr]);
-    s.push(['Street',$('addrStreet').value.trim(),'Unit',$('addrUnit').value.trim(),'City',$('addrCity').value.trim(),'State',$('addrState').value.trim().toUpperCase(),'ZIP',$('addrZip').value.trim()]);
-  }
-  s.push(['Units',numUnits]);s.push([]);
-  saveUD();
-  s.push(['UNIT DETAILS']);
-  var rents=getRents();
+  s.push(['Quick Real Estate Analysis','','','']);
+  s.push(['Property',addr||'(No address entered)','','Date',new Date().toLocaleDateString()]);
+  s.push([]);
+
+  s.push(['UNIT DETAILS','','','']);
   for(var i=0;i<numUnits;i++){var u=units[i];
-    if(u.type==='ltr')s.push(['Unit '+(i+1)+' (LTR)','Monthly Rent',u.rent]);
-    else s.push(['Unit '+(i+1)+' (STR)','Nightly',u.nightly,'Occ%',u.occ/100,'Monthly',rents[i],'Furnish',u.furnish]);
+    if(u.type==='ltr')s.push(['Unit '+(i+1)+' (LTR)','Monthly Rent','',rents[i]]);
+    else s.push(['Unit '+(i+1)+' (STR)','Nightly: $'+u.nightly,'Occ: '+u.occ+'%',rents[i]]);
   }
-  s.push(['Total Monthly Rent','',rents.reduce(function(a,b){return a+b},0)]);s.push([]);
+  s.push(['Total Monthly Rent','','',rents.reduce(function(a,b){return a+b},0)]);
+  s.push([]);
 
-  s.push(['DEAL INPUTS']);
-  s.push(['Purchase Price',vl('purchasePrice')]);s.push(['Rehab Budget',getRehab()]);
-  s.push(['ARV',vl('arv')]);s.push(['Monthly Insurance',vl('monthlyInsurance')]);
-  s.push(['Monthly Tax',vl('monthlyTax')]);s.push(['Selling Costs',vl('sellCostPct')/100]);s.push([]);
+  s.push(['DEAL INPUTS','','','']);
+  s.push(['Purchase Price','',vl('purchasePrice')]);
+  s.push(['Rehab Budget','',getRehab()]);
+  s.push(['After Repair Value (ARV)','',vl('arv')]);
+  s.push(['Monthly Insurance','',vl('monthlyInsurance')]);
+  s.push(['Monthly Tax','',vl('monthlyTax')]);
+  s.push(['Selling Costs','',vl('sellCostPct')/100]);
+  s.push([]);
 
-  // Strategy comparison
   s.push(['STRATEGY COMPARISON','Buy & Hold','BRRRR','Flip']);
   s.push(['Cash Invested',lastBH?lastBH.totalCashIn:null,lastBR?lastBR.totalCashIn:null,lastFL?lastFL.cashInvested:null]);
-  s.push(['Year 1 CoC Return',lastBH?lastBH.coc:null,lastBR?lastBR.coc:null,'N/A']);
-  s.push(['10-Year IRR',lastBH?lastBH.irr:null,lastBR?lastBR.irr:null,'N/A']);
-  s.push(['MOIC',lastBH?lastBH.moic:null,lastBR?lastBR.moic:null,'N/A']);
-  s.push(['Flip ROI','N/A','N/A',lastFL?lastFL.roi:null]);
-  s.push(['Flip Annualized ROI','N/A','N/A',lastFL?lastFL.annRoi:null]);
-  s.push(['Flip Profit','N/A','N/A',lastFL?lastFL.profit:null]);
+  s.push(['Year 1 CoC Return',lastBH?lastBH.coc:null,lastBR?lastBR.coc:null,null]);
+  s.push(['10-Year IRR',lastBH?lastBH.irr:null,lastBR?lastBR.irr:null,null]);
+  s.push(['MOIC',lastBH?lastBH.moic:null,lastBR?lastBR.moic:null,null]);
+  s.push(['Flip ROI',null,null,lastFL?lastFL.roi:null]);
+  s.push(['Flip Annualized ROI',null,null,lastFL?lastFL.annRoi:null]);
+  s.push(['Flip Profit',null,null,lastFL?lastFL.profit:null]);
 
   var ws1=XLSX.utils.aoa_to_sheet(s);
-  ws1['!cols']=[{wch:22},{wch:16},{wch:16},{wch:12},{wch:10},{wch:12},{wch:12},{wch:10},{wch:12}];
+  ws1['!cols']=[{wch:24},{wch:18},{wch:18},{wch:18},{wch:16}];
+  ws1['!merges']=[{s:{r:0,c:0},e:{r:0,c:3}}];
+
+  var dealStart=3+numUnits+4;
+  for(var r=dealStart;r<dealStart+5;r++){
+    var cl=XLSX.utils.encode_cell({r:r,c:2});
+    if(ws1[cl]&&typeof ws1[cl].v==='number')ws1[cl].z='$#,##0';
+  }
+  var scCell=XLSX.utils.encode_cell({r:dealStart+5,c:2});
+  if(ws1[scCell])ws1[scCell].z='0.0%';
+
+  var compStart=dealStart+8;
+  for(var c=1;c<=3;c++){
+    var cashCell=XLSX.utils.encode_cell({r:compStart,c:c});
+    if(ws1[cashCell]&&typeof ws1[cashCell].v==='number')ws1[cashCell].z='$#,##0';
+    var profCell=XLSX.utils.encode_cell({r:compStart+6,c:c});
+    if(ws1[profCell]&&typeof ws1[profCell].v==='number')ws1[profCell].z='$#,##0';
+  }
+  for(var rr=compStart+1;rr<=compStart+5;rr++){
+    for(var cc=1;cc<=3;cc++){
+      var pcell=XLSX.utils.encode_cell({r:rr,c:cc});
+      if(ws1[pcell]&&typeof ws1[pcell].v==='number')ws1[pcell].z='0.00%';
+    }
+  }
+  for(var mc=1;mc<=3;mc++){
+    var moicCell=XLSX.utils.encode_cell({r:compStart+3,c:mc});
+    if(ws1[moicCell]&&typeof ws1[moicCell].v==='number')ws1[moicCell].z='0.00"x"';
+  }
+  for(var ur=3;ur<3+numUnits+1;ur++){
+    var rc=XLSX.utils.encode_cell({r:ur,c:3});
+    if(ws1[rc]&&typeof ws1[rc].v==='number')ws1[rc].z='$#,##0';
+  }
   XLSX.utils.book_append_sheet(wb,ws1,'Summary');
 
-  // Pro Forma sheets
   function addPF(name,data){
     if(!data)return;
-    var pf=[['10-Year Pro Forma — '+name+(addr?' — '+addr:'')],[]];
-    pf.push(['Year','Eff. Rent','OpEx','NOI','Debt Service','Cash Flow','Prop Value','Loan Bal','Equity']);
-    data.years.forEach(function(y){pf.push([y.yr,y.effRent,y.opex,y.noi,y.debtSvc,y.cf,y.propVal,y.remLoan,y.equity])});
-    pf.push([]);pf.push(['Sale Proceeds (Yr 10)',data.years[9].saleProceeds]);
+    var pf=[];
+    pf.push(['10-Year Pro Forma: '+name]);
+    if(addr)pf.push([addr]);else pf.push([]);
+    pf.push([]);
+    pf.push(['Year','Eff. Gross Rent','Operating Exp.','NOI','Debt Service','Cash Flow','Property Value','Loan Balance','Equity']);
+    data.years.forEach(function(y){
+      pf.push([y.yr,y.effRent,y.opex,y.noi,y.debtSvc,y.cf,y.propVal,y.remLoan,y.equity]);
+    });
+    pf.push([]);
+    pf.push(['Year 10 Sale Proceeds','',data.years[9].saleProceeds]);
+    pf.push(['Total Cash Invested','',data.totalCashIn]);
     var ws=XLSX.utils.aoa_to_sheet(pf);
-    ws['!cols']=[{wch:8},{wch:14},{wch:16},{wch:14},{wch:14},{wch:14},{wch:14},{wch:14},{wch:14}];
-    for(var r=3;r<13;r++)for(var c=1;c<=8;c++){var cl=XLSX.utils.encode_cell({r:r,c:c});if(ws[cl])ws[cl].z='$#,##0'}
+    ws['!cols']=[{wch:8},{wch:16},{wch:16},{wch:14},{wch:14},{wch:14},{wch:16},{wch:16},{wch:14}];
+    ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}},{s:{r:1,c:0},e:{r:1,c:8}}];
+    for(var r=4;r<=13;r++){
+      for(var c=1;c<=8;c++){
+        var cl=XLSX.utils.encode_cell({r:r,c:c});
+        if(ws[cl]&&typeof ws[cl].v==='number')ws[cl].z='$#,##0';
+      }
+    }
+    for(var sr=15;sr<=16;sr++){
+      var sc=XLSX.utils.encode_cell({r:sr,c:2});
+      if(ws[sc]&&typeof ws[sc].v==='number')ws[sc].z='$#,##0';
+    }
     XLSX.utils.book_append_sheet(wb,ws,name+' Pro Forma');
   }
   addPF('Buy & Hold',lastBH);addPF('BRRRR',lastBR);
 
-  // Flip sheet
   if(lastFL){
-    var fl=[['Flip Analysis'+(addr?' — '+addr:'')],[]];
-    fl.push(['Purchase Price',lastFL.inp.pp]);fl.push(['Rehab',lastFL.inp.rehab]);
-    fl.push(['Closing Costs',lastFL.buyClose]);fl.push(['Holding Costs',lastFL.holdCosts]);
-    if(useHM)fl.push(['HM Costs',lastFL.hmPts+lastFL.hmInt]);
-    fl.push(['Total Cost',lastFL.totalCost]);fl.push([]);
-    fl.push(['Sale Price (ARV)',lastFL.inp.arv]);fl.push(['Selling Costs',lastFL.sellCosts]);
+    var fl=[];
+    fl.push(['Flip Analysis']);
+    if(addr)fl.push([addr]);else fl.push([]);
+    fl.push([]);
+    fl.push(['COSTS','']);
+    fl.push(['Purchase Price',lastFL.inp.pp]);
+    fl.push(['Rehab',lastFL.inp.rehab]);
+    fl.push(['Closing Costs',lastFL.buyClose]);
+    fl.push(['Holding Costs',lastFL.holdCosts]);
+    if(useHM)fl.push(['Hard Money Costs',lastFL.hmPts+lastFL.hmInt]);
+    fl.push(['Total Cost',lastFL.totalCost]);
+    fl.push([]);
+    fl.push(['PROCEEDS','']);
+    fl.push(['Sale Price (ARV)',lastFL.inp.arv]);
+    fl.push(['Selling Costs',lastFL.sellCosts]);
     if(useHM)fl.push(['HM Payoff',lastFL.hmPay]);
-    fl.push(['Net Proceeds',lastFL.netProceeds]);fl.push([]);
-    fl.push(['Profit',lastFL.profit]);fl.push(['ROI',lastFL.roi]);fl.push(['Annualized ROI',lastFL.annRoi]);
-    fl.push(['Hold Period (months)',lastFL.holdMo]);fl.push(['Cash Invested',lastFL.cashInvested]);
-    var wsf=XLSX.utils.aoa_to_sheet(fl);wsf['!cols']=[{wch:22},{wch:16}];
+    fl.push(['Net Proceeds',lastFL.netProceeds]);
+    fl.push([]);
+    fl.push(['RETURNS','']);
+    fl.push(['Profit',lastFL.profit]);
+    fl.push(['ROI',lastFL.roi]);
+    fl.push(['Annualized ROI',lastFL.annRoi]);
+    fl.push(['Hold Period (months)',lastFL.holdMo]);
+    fl.push(['Cash Invested',lastFL.cashInvested]);
+
+    var wsf=XLSX.utils.aoa_to_sheet(fl);
+    wsf['!cols']=[{wch:24},{wch:18}];
+    wsf['!merges']=[{s:{r:0,c:0},e:{r:0,c:1}}];
+    var flipRows=wsf['!ref']?XLSX.utils.decode_range(wsf['!ref']).e.r+1:20;
+    for(var fr=3;fr<flipRows;fr++){
+      var fc=XLSX.utils.encode_cell({r:fr,c:1});
+      if(wsf[fc]&&typeof wsf[fc].v==='number'){
+        if(Math.abs(wsf[fc].v)<2)wsf[fc].z='0.00%';
+        else wsf[fc].z='$#,##0';
+      }
+    }
     XLSX.utils.book_append_sheet(wb,wsf,'Flip');
   }
-
-  var fn='RE_Analysis';
-  var streetName=$('addrStreet').value.trim();
-  if(streetName)fn=streetName.replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').substring(0,40);
-  fn+='_'+new Date().toISOString().slice(0,10)+'.xlsx';
-  XLSX.writeFile(wb,fn);
+  XLSX.writeFile(wb,getExportFilename('xlsx'));
 }
+
+// ─── PDF Download ────────────────────────────────────────────
+function downloadPDF(e){
+  if(e)e.preventDefault();
+  if(!lastBH&&!lastBR){alert('Please calculate first.');return}
+  var addr=getFullAddress();
+  saveUD();var rents=getRents();
+  var totalRent=rents.reduce(function(a,b){return a+b},0);
+
+  var doc=new jspdf.jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
+  var W=doc.internal.pageSize.getWidth();
+  var mg=50;var cw=W-mg*2;
+  var y=50;
+
+  doc.setFillColor(44,52,55);
+  doc.rect(0,0,W,90,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(242,237,227);
+  doc.text(addr||'Real Estate Deal Analysis',mg,42);
+  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(181,169,154);
+  doc.text('Quick Real Estate Analyzer  |  quickreanalyzer.com  |  '+new Date().toLocaleDateString(),mg,65);
+  y=110;
+
+  doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(44,52,55);
+  doc.text('Deal Overview',mg,y);y+=6;
+  doc.setDrawColor(92,122,97);doc.setLineWidth(1.5);doc.line(mg,y,mg+100,y);y+=16;
+
+  var dealData=[
+    ['Purchase Price',fmt(vl('purchasePrice')),'After Repair Value',fmt(vl('arv'))],
+    ['Rehab Budget',fmt(getRehab()),'Monthly Rent',fmt(totalRent)],
+    ['Monthly Tax',fmt(vl('monthlyTax')),'Monthly Insurance',fmt(vl('monthlyInsurance'))],
+    ['Units',''+numUnits,'Selling Costs',vl('sellCostPct')+'%']
+  ];
+  doc.autoTable({startY:y,margin:{left:mg,right:mg},theme:'plain',
+    styles:{fontSize:10,cellPadding:{top:5,bottom:5,left:6,right:6},textColor:[44,52,55],font:'helvetica'},
+    columnStyles:{0:{fontStyle:'bold',cellWidth:120,textColor:[84,96,112]},1:{cellWidth:cw/2-120},
+      2:{fontStyle:'bold',cellWidth:120,textColor:[84,96,112]},3:{cellWidth:cw/2-120}},
+    body:dealData
+  });
+  y=doc.lastAutoTable.finalY+24;
+
+  doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(44,52,55);
+  doc.text('Strategy Comparison',mg,y);y+=6;
+  doc.setDrawColor(92,122,97);doc.setLineWidth(1.5);doc.line(mg,y,mg+130,y);y+=16;
+
+  var compHead=[['','Buy & Hold','BRRRR','Flip']];
+  var compBody=[
+    ['Cash Invested',lastBH?fmt(lastBH.totalCashIn):'—',lastBR?fmt(lastBR.totalCashIn):'—',lastFL?fmt(lastFL.cashInvested):'—'],
+    ['Year 1 Cash-on-Cash',lastBH?fPct(lastBH.coc):'—',lastBR?fPct(lastBR.coc):'—','—'],
+    ['10-Year IRR',lastBH?fPct(lastBH.irr):'—',lastBR?fPct(lastBR.irr):'—','—'],
+    ['MOIC',lastBH?fX(lastBH.moic):'—',lastBR?fX(lastBR.moic):'—','—'],
+    ['ROI','—','—',lastFL?fPct(lastFL.roi):'—'],
+    ['Annualized ROI','—','—',lastFL?fPct(lastFL.annRoi):'—'],
+    ['Profit','—','—',lastFL?fmt(lastFL.profit):'—']
+  ];
+  doc.autoTable({startY:y,margin:{left:mg,right:mg},theme:'grid',
+    headStyles:{fillColor:[44,52,55],textColor:[242,237,227],fontStyle:'bold',fontSize:10,halign:'center'},
+    styles:{fontSize:10,cellPadding:6,textColor:[44,52,55],lineColor:[228,227,216],lineWidth:0.5,font:'helvetica'},
+    columnStyles:{0:{fontStyle:'bold',cellWidth:140,textColor:[84,96,112]},1:{halign:'center'},2:{halign:'center'},3:{halign:'center'}},
+    head:compHead,body:compBody,
+    didParseCell:function(data){
+      if(data.section==='body'&&data.column.index>0){
+        var v=data.cell.raw;
+        if(v&&v!=='—'&&v.indexOf('-')===-1&&(v.indexOf('%')>-1||v.indexOf('$')>-1||v.indexOf('x')>-1)){
+          data.cell.styles.textColor=[92,122,97];
+        }
+        if(v&&v.indexOf('-')===0){data.cell.styles.textColor=[164,87,75]}
+      }
+    }
+  });
+  y=doc.lastAutoTable.finalY+24;
+
+  function addPFtoPDF(name,data){
+    if(!data)return;
+    if(y>550){doc.addPage();y=50}
+    doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(44,52,55);
+    doc.text('10-Year Pro Forma: '+name,mg,y);y+=6;
+    doc.setDrawColor(92,122,97);doc.setLineWidth(1.5);doc.line(mg,y,mg+160,y);y+=16;
+
+    var pfHead=[['Yr','Eff. Rent','OpEx','NOI','Debt Svc','Cash Flow','Prop Value','Loan Bal','Equity']];
+    var pfBody=data.years.map(function(yr){return[
+      yr.yr,fmt(yr.effRent),fmt(yr.opex),fmt(yr.noi),fmt(yr.debtSvc),fmt(yr.cf),fmt(yr.propVal),fmt(yr.remLoan),fmt(yr.equity)
+    ]});
+    pfBody.push(['Sale','','',fmt(data.years[9].saleProceeds),'','','','','']);
+
+    doc.autoTable({startY:y,margin:{left:mg,right:mg},theme:'striped',
+      headStyles:{fillColor:[44,52,55],textColor:[242,237,227],fontStyle:'bold',fontSize:8,halign:'center'},
+      styles:{fontSize:8,cellPadding:4,textColor:[44,52,55],font:'helvetica'},
+      alternateRowStyles:{fillColor:[248,245,238]},
+      columnStyles:{0:{halign:'center',cellWidth:28},1:{halign:'right'},2:{halign:'right'},3:{halign:'right'},
+        4:{halign:'right'},5:{halign:'right'},6:{halign:'right'},7:{halign:'right'},8:{halign:'right'}},
+      head:pfHead,body:pfBody,
+      didParseCell:function(data){
+        if(data.section==='body'&&data.column.index===5){
+          var v=data.cell.raw;
+          if(v&&v.indexOf('-')>-1&&v.indexOf('$')>-1)data.cell.styles.textColor=[164,87,75];
+          else if(v&&v!=='---')data.cell.styles.textColor=[92,122,97];
+        }
+      }
+    });
+    y=doc.lastAutoTable.finalY+24;
+  }
+  addPFtoPDF('Buy & Hold',lastBH);
+  addPFtoPDF('BRRRR',lastBR);
+
+  if(lastFL){
+    if(y>550){doc.addPage();y=50}
+    doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(44,52,55);
+    doc.text('Flip Analysis',mg,y);y+=6;
+    doc.setDrawColor(92,122,97);doc.setLineWidth(1.5);doc.line(mg,y,mg+90,y);y+=16;
+
+    var flipRows=[
+      ['Purchase Price',fmt(lastFL.inp.pp)],['Rehab',fmt(lastFL.inp.rehab)],
+      ['Closing Costs',fmt(lastFL.buyClose)],['Holding Costs',fmt(lastFL.holdCosts)]
+    ];
+    if(useHM)flipRows.push(['Hard Money Costs',fmt(lastFL.hmPts+lastFL.hmInt)]);
+    flipRows.push([{content:'Total Cost',styles:{fontStyle:'bold'}},{content:fmt(lastFL.totalCost),styles:{fontStyle:'bold'}}]);
+    flipRows.push(['','']);
+    flipRows.push(['Sale Price (ARV)',fmt(lastFL.inp.arv)]);
+    flipRows.push(['Selling Costs',fmt(lastFL.sellCosts)]);
+    if(useHM)flipRows.push(['HM Payoff',fmt(lastFL.hmPay)]);
+    flipRows.push([{content:'Net Proceeds',styles:{fontStyle:'bold'}},{content:fmt(lastFL.netProceeds),styles:{fontStyle:'bold'}}]);
+    flipRows.push(['','']);
+    flipRows.push([{content:'Profit',styles:{fontStyle:'bold',textColor:[92,122,97]}},{content:fmt(lastFL.profit),styles:{fontStyle:'bold',textColor:lastFL.profit>=0?[92,122,97]:[164,87,75]}}]);
+    flipRows.push(['ROI',fPct(lastFL.roi)]);
+    flipRows.push(['Annualized ROI',fPct(lastFL.annRoi)]);
+    flipRows.push(['Hold Period',lastFL.holdMo+' months']);
+    flipRows.push(['Cash Invested',fmt(lastFL.cashInvested)]);
+
+    doc.autoTable({startY:y,margin:{left:mg,right:mg},theme:'plain',
+      styles:{fontSize:10,cellPadding:{top:5,bottom:5,left:8,right:8},textColor:[44,52,55],font:'helvetica'},
+      columnStyles:{0:{cellWidth:180,fontStyle:'bold',textColor:[84,96,112]},1:{halign:'right'}},
+      body:flipRows,tableWidth:340
+    });
+    y=doc.lastAutoTable.finalY+24;
+  }
+
+  var pages=doc.internal.getNumberOfPages();
+  for(var p=1;p<=pages;p++){
+    doc.setPage(p);
+    doc.setFontSize(8);doc.setTextColor(181,169,154);doc.setFont('helvetica','normal');
+    doc.text('quickreanalyzer.com — For informational purposes only. Not financial advice.',mg,doc.internal.pageSize.getHeight()-30);
+    doc.text('Page '+p+' of '+pages,W-mg-50,doc.internal.pageSize.getHeight()-30);
+  }
+
+  doc.save(getExportFilename('pdf'));
+}
+$('pdfBtn').addEventListener('click',function(e){e.preventDefault();downloadPDF(e)},false);
+$('pdfBtn').addEventListener('touchend',function(e){e.preventDefault();downloadPDF(e)},false);
+
 // ─── Email Capture on Download ──────────────────────────────
 var emailShown=false;
 function handleDownload(e){
