@@ -537,10 +537,9 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
   <div class="email-modal">
     <h3>Get your analysis emailed to you</h3>
     <p>Enter your email to receive a copy (optional).</p>
-    <form id="emailForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <form id="emailForm">
       <input type="email" name="email" id="emailInput" placeholder="you@example.com" required>
-      <input type="hidden" name="source" value="Quick RE Analyzer - Excel Download">
-      <input type="hidden" name="address" id="emailAddr">
+      <input type="hidden" id="emailAddr">
       <button type="submit" class="email-submit">Send &amp; Download</button>
     </form>
     <button type="button" class="email-skip" id="emailSkip">No thanks, just download</button>
@@ -1297,8 +1296,13 @@ $('dlBtn').addEventListener('touchend',function(e){e.preventDefault();handleDown
 $('emailSkip').addEventListener('click',function(e){e.preventDefault();$('emailOverlay').classList.remove('show');downloadExcel()},false);
 $('emailForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var fd=new FormData(this);
-  fetch(this.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}}).catch(function(){});
+  var email=$('emailInput').value;
+  if(email){
+    var gfURL='https://docs.google.com/forms/d/e/1FAIpQLSeLSNqOWiAUUz7X6xBOHT2Du6atNqP_sk2miUTciHHFywgYmg/formResponse';
+    var fd=new FormData();
+    fd.append('entry.1988375100',email);
+    fetch(gfURL,{method:'POST',body:fd,mode:'no-cors'}).catch(function(){});
+  }
   $('emailOverlay').classList.remove('show');
   downloadExcel();
 });
