@@ -369,6 +369,8 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
         <div class="iw"><input type="number" inputmode="decimal" id="rentGrowth" value="3" step="0.5"><span class="suf">%</span></div></div>
       <div class="field"><label>Annual Appreciation</label>
         <div class="iw"><input type="number" inputmode="decimal" id="appreciation" value="3" step="0.5"><span class="suf">%</span></div></div>
+      <div class="field"><label>Annual Expense Growth</label>
+        <div class="iw"><input type="number" inputmode="decimal" id="expenseGrowth" value="2" step="0.5"><span class="suf">%</span></div></div>
     </div>
   </div>
 
@@ -710,7 +712,7 @@ function getInputs(rentOv,vacOv){
   return{pp:vl('purchasePrice'),rehab:getRehab(),arv:vl('arv'),rent:totalR,rents:rents,
     ins:vl('monthlyInsurance'),tax:vl('monthlyTax'),closePct:vl('closingCostPct')/100,
     vacRate:vacOv!=null?vacOv/100:vl('vacancyPct')/100,mgmt:vl('mgmtPct')/100,capex:vl('capexPct')/100,
-    rGrowth:vl('rentGrowth')/100,appRate:vl('appreciation')/100,sellPct:vl('sellCostPct')/100,
+    rGrowth:vl('rentGrowth')/100,appRate:vl('appreciation')/100,expGrowth:vl('expenseGrowth')/100,sellPct:vl('sellCostPct')/100,
     furnish:getTotalFurnish()};
 }
 
@@ -728,7 +730,8 @@ function analyzeBH(rentOv,vacOv){
   for(var yr=1;yr<=10;yr++){
     var annR=inp.rent*12*Math.pow(1+inp.rGrowth,yr-1);
     var effR=annR*(1-inp.vacRate);
-    var opex=effR*inp.mgmt+effR*inp.capex+(inp.ins+inp.tax)*12;
+    var expFactor=Math.pow(1+inp.expGrowth,yr-1);
+    var opex=effR*inp.mgmt+effR*inp.capex+(inp.ins+inp.tax)*12*expFactor;
     var noi=effR-opex;var ds=moMort*12;var cf=noi-ds;
     var pv=inp.arv*Math.pow(1+inp.appRate,yr);
     var rl=loanAmt>0?loanBalF(bhRate/12,bhTerm*12,loanAmt,yr*12):0;
@@ -764,7 +767,8 @@ function analyzeBR(rentOv,vacOv){
   for(var yr=1;yr<=10;yr++){
     var annR=inp.rent*12*Math.pow(1+inp.rGrowth,yr-1);
     var effR=annR*(1-inp.vacRate);
-    var opex=effR*inp.mgmt+effR*inp.capex+(inp.ins+inp.tax)*12;
+    var expFactor=Math.pow(1+inp.expGrowth,yr-1);
+    var opex=effR*inp.mgmt+effR*inp.capex+(inp.ins+inp.tax)*12*expFactor;
     var noi=effR-opex;
     var ds=annDS(rRate,termYrs,refiLoan,yr,useIO,ioYrs);
     var cf=noi-ds;
@@ -1318,7 +1322,7 @@ function shareAnalysis(e){
     sc:'sellCostPct',dp:'downPct',br:'bhRate',bt:'bhTermYears',rr:'refiRate',rl:'refiLtv',
     rt:'refiTermYears',iy:'ioYears',hr:'hmRate',hp:'hmPoints',hl:'hmLtc',ht:'hmTermMonths',
     fh:'flipHoldMonths',fc:'flipHoldCostMo',cc:'closingCostPct',vp:'vacancyPct',mp:'mgmtPct',
-    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',sf:'sqft',cs:'costPerSqft'};
+    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',eg:'expenseGrowth',sf:'sqft',cs:'costPerSqft'};
   for(var k in fields)params.set(k,$(fields[k]).value);
   params.set('st',$('addrStreet').value);params.set('un',$('addrUnit').value);
   params.set('ci',$('addrCity').value);params.set('sa',$('addrState').value);params.set('zp',$('addrZip').value);
@@ -1342,7 +1346,7 @@ function loadFromURL(){
     sc:'sellCostPct',dp:'downPct',br:'bhRate',bt:'bhTermYears',rr:'refiRate',rl:'refiLtv',
     rt:'refiTermYears',iy:'ioYears',hr:'hmRate',hp:'hmPoints',hl:'hmLtc',ht:'hmTermMonths',
     fh:'flipHoldMonths',fc:'flipHoldCostMo',cc:'closingCostPct',vp:'vacancyPct',mp:'mgmtPct',
-    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',sf:'sqft',cs:'costPerSqft'};
+    cp:'capexPct',rg:'rentGrowth',ap:'appreciation',eg:'expenseGrowth',sf:'sqft',cs:'costPerSqft'};
   for(var k in fields)if(p.has(k))$(fields[k]).value=p.get(k);
   if(p.has('st'))$('addrStreet').value=p.get('st');
   if(p.has('un'))$('addrUnit').value=p.get('un');
@@ -1379,7 +1383,7 @@ function saveToLocal(){
       flipHoldMonths:$('flipHoldMonths').value,flipHoldCostMo:$('flipHoldCostMo').value,
       closingCostPct:$('closingCostPct').value,vacancyPct:$('vacancyPct').value,mgmtPct:$('mgmtPct').value,
       capexPct:$('capexPct').value,rentGrowth:$('rentGrowth').value,appreciation:$('appreciation').value,
-      numUnits:numUnits,units:units
+      expenseGrowth:$('expenseGrowth').value,numUnits:numUnits,units:units
     };
     try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}catch(e){}
     var n=$('saveNotice');n.classList.add('show');setTimeout(function(){n.classList.remove('show')},1500);
@@ -1397,7 +1401,7 @@ function loadFromLocal(){
     var flds=['purchasePrice','rehabBudget','arv','sqft','costPerSqft','monthlyInsurance','monthlyTax',
       'sellCostPct','downPct','bhRate','bhTermYears','refiRate','refiLtv','refiTermYears','ioYears',
       'hmRate','hmPoints','hmLtc','hmTermMonths','flipHoldMonths','flipHoldCostMo',
-      'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation'];
+      'closingCostPct','vacancyPct','mgmtPct','capexPct','rentGrowth','appreciation','expenseGrowth'];
     for(var i=0;i<flds.length;i++){if(d[flds[i]]!=null)$(flds[i]).value=d[flds[i]]}
     if(d.rehabMode&&d.rehabMode!==rehabMode){rehabMode=d.rehabMode;
       document.querySelectorAll('.rehab-opt').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-mode')===rehabMode)});
