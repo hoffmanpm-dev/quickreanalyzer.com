@@ -1,4 +1,4 @@
-var CACHE_NAME = 'quickre-v2';
+var CACHE_NAME = 'quickre-v3';
 var urlsToCache = [
   '/',
   '/index.html',
