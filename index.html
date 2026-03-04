@@ -393,6 +393,7 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
     <div class="strat-panel active" id="panel_bh">
       <div class="mg">
         <div class="mc"><div class="ml">Cash-on-Cash</div><div class="mv" id="bh_coc">—</div><div class="ms">Year 1</div></div>
+        <div class="mc"><div class="ml">Cap Rate</div><div class="mv" id="bh_cap">—</div><div class="ms">Year 1 NOI / Price</div></div>
         <div class="mc"><div class="ml">10-Year IRR</div><div class="mv" id="bh_irr">—</div><div class="ms">Incl. sale</div></div>
         <div class="mc"><div class="ml">MOIC</div><div class="mv" id="bh_moic">—</div><div class="ms">10-year</div></div>
         <div class="mc"><div class="ml">Mo. Cash Flow</div><div class="mv" id="bh_mcf">—</div><div class="ms">Year 1</div></div>
@@ -425,6 +426,7 @@ td.yr{text-align:center;font-weight:700;color:#7B7368}
     <div class="strat-panel" id="panel_brrrr">
       <div class="mg">
         <div class="mc"><div class="ml">Cash-on-Cash</div><div class="mv" id="br_coc">—</div><div class="ms">Year 1, levered</div></div>
+        <div class="mc"><div class="ml">Cap Rate</div><div class="mv" id="br_cap">—</div><div class="ms">Year 1 NOI / ARV</div></div>
         <div class="mc"><div class="ml">Unlevered CoC</div><div class="mv" id="br_unlev">—</div><div class="ms">Year 1</div></div>
         <div class="mc"><div class="ml">10-Year IRR</div><div class="mv" id="br_irr">—</div><div class="ms">Incl. sale</div></div>
         <div class="mc"><div class="ml">MOIC</div><div class="mv" id="br_moic">—</div><div class="ms">10-year</div></div>
@@ -742,11 +744,12 @@ function analyzeBH(rentOv,vacOv){
     irrCF.push(yr<10?cf:cf+sp);
   }
   var coc=totalCashIn>0?years[0].cf/totalCashIn:null;
+  var capRate=inp.pp>0?years[0].noi/inp.pp:null;
   var irr=calcIRR(irrCF);
   var totCF=0;for(var i=0;i<10;i++)totCF+=years[i].cf;
   var moic=totalCashIn>0?(totCF+years[9].saleProceeds)/totalCashIn:null;
   return{totalCashIn:totalCashIn,downAmt:downAmt,loanAmt:loanAmt,buyClose:buyClose,moMort:moMort,
-    coc:coc,irr:irr,moic:moic,years:years,inp:inp};
+    coc:coc,capRate:capRate,irr:irr,moic:moic,years:years,inp:inp};
 }
 
 // ─── BRRRR Analysis ──────────────────────────────────────────
@@ -780,13 +783,14 @@ function analyzeBR(rentOv,vacOv){
     irrCF.push(yr<10?cf:cf+sp);
   }
   var coc=totalCashIn>0?years[0].cf/totalCashIn:null;
+  var capRate=inp.arv>0?years[0].noi/inp.arv:null;
   var unlev=(tpc+inp.furnish+pClose)>0?years[0].noi/(tpc+inp.furnish+pClose):null;
   var irr=calcIRR(irrCF);
   var totCF=0;for(var i=0;i<10;i++)totCF+=years[i].cf;
   var moic=totalCashIn>0?(totCF+years[9].saleProceeds)/totalCashIn:null;
   return{totalCashIn:totalCashIn,tpc:tpc,initCash:initCash,pClose:pClose,refiLoan:refiLoan,refiClose:refiClose,
     cashBack:cashBack,hmInt:hmInt,hmPts:hmPts,hmPay:hmPay,
-    coc:coc,unlev:unlev,irr:irr,moic:moic,years:years,inp:inp,rRate:rRate};
+    coc:coc,capRate:capRate,unlev:unlev,irr:irr,moic:moic,years:years,inp:inp,rRate:rRate};
 }
 
 // ─── Flip Analysis ───────────────────────────────────────────
@@ -930,7 +934,9 @@ function calculate(e){
   // Buy & Hold
   if(lastBH){
     var b=lastBH;
-    setMV('bh_coc',b.coc,0);setMV('bh_irr',b.irr,0);
+    setMV('bh_coc',b.coc,0);
+    $('bh_cap').textContent=fPct(b.capRate);$('bh_cap').className='mv '+(b.capRate>0?'blu':'red');
+    setMV('bh_irr',b.irr,0);
     $('bh_moic').textContent=fX(b.moic);$('bh_moic').className='mv '+(b.moic>1?'grn':'red');
     var mcf=b.years[0].cf/12;$('bh_mcf').textContent=fmt(mcf);$('bh_mcf').className='mv '+(mcf>=0?'grn':'red');
     $('bh_pp').textContent=fmt(b.inp.pp);$('bh_rehab').textContent=fmt(b.inp.rehab);
@@ -945,6 +951,7 @@ function calculate(e){
   if(lastBR){
     var r=lastBR;
     setMV('br_coc',r.coc,0);
+    $('br_cap').textContent=fPct(r.capRate);$('br_cap').className='mv '+(r.capRate>0?'blu':'red');
     $('br_unlev').textContent=fPct(r.unlev);$('br_unlev').className='mv '+(r.unlev>0?'blu':'red');
     setMV('br_irr',r.irr,0);
     $('br_moic').textContent=fX(r.moic);$('br_moic').className='mv '+(r.moic>1?'grn':'red');
@@ -1024,6 +1031,7 @@ function downloadExcel(e){
   s.push(['STRATEGY COMPARISON','Buy & Hold','BRRRR','Flip']);
   s.push(['Cash Invested',lastBH?lastBH.totalCashIn:null,lastBR?lastBR.totalCashIn:null,lastFL?lastFL.cashInvested:null]);
   s.push(['Year 1 CoC Return',lastBH?lastBH.coc:null,lastBR?lastBR.coc:null,null]);
+  s.push(['Cap Rate',lastBH?lastBH.capRate:null,lastBR?lastBR.capRate:null,null]);
   s.push(['10-Year IRR',lastBH?lastBH.irr:null,lastBR?lastBR.irr:null,null]);
   s.push(['MOIC',lastBH?lastBH.moic:null,lastBR?lastBR.moic:null,null]);
   s.push(['Flip ROI',null,null,lastFL?lastFL.roi:null]);
@@ -1046,17 +1054,17 @@ function downloadExcel(e){
   for(var c=1;c<=3;c++){
     var cashCell=XLSX.utils.encode_cell({r:compStart,c:c});
     if(ws1[cashCell]&&typeof ws1[cashCell].v==='number')ws1[cashCell].z='$#,##0';
-    var profCell=XLSX.utils.encode_cell({r:compStart+6,c:c});
+    var profCell=XLSX.utils.encode_cell({r:compStart+7,c:c});
     if(ws1[profCell]&&typeof ws1[profCell].v==='number')ws1[profCell].z='$#,##0';
   }
-  for(var rr=compStart+1;rr<=compStart+5;rr++){
+  for(var rr=compStart+1;rr<=compStart+6;rr++){
     for(var cc=1;cc<=3;cc++){
       var pcell=XLSX.utils.encode_cell({r:rr,c:cc});
       if(ws1[pcell]&&typeof ws1[pcell].v==='number')ws1[pcell].z='0.00%';
     }
   }
   for(var mc=1;mc<=3;mc++){
-    var moicCell=XLSX.utils.encode_cell({r:compStart+3,c:mc});
+    var moicCell=XLSX.utils.encode_cell({r:compStart+4,c:mc});
     if(ws1[moicCell]&&typeof ws1[moicCell].v==='number')ws1[moicCell].z='0.00"x"';
   }
   for(var ur=3;ur<3+numUnits+1;ur++){
@@ -1184,6 +1192,7 @@ function downloadPDF(e){
   var compBody=[
     ['Cash Invested',lastBH?fmt(lastBH.totalCashIn):'—',lastBR?fmt(lastBR.totalCashIn):'—',lastFL?fmt(lastFL.cashInvested):'—'],
     ['Year 1 Cash-on-Cash',lastBH?fPct(lastBH.coc):'—',lastBR?fPct(lastBR.coc):'—','—'],
+    ['Cap Rate',lastBH?fPct(lastBH.capRate):'—',lastBR?fPct(lastBR.capRate):'—','—'],
     ['10-Year IRR',lastBH?fPct(lastBH.irr):'—',lastBR?fPct(lastBR.irr):'—','—'],
     ['MOIC',lastBH?fX(lastBH.moic):'—',lastBR?fX(lastBR.moic):'—','—'],
     ['ROI','—','—',lastFL?fPct(lastFL.roi):'—'],
