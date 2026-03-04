@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Learn what Cap Rate, Cash-on-Cash Return, IRR, MOIC, and NOI mean for real estate investors. Understand which metrics matter most in cash flow markets vs. appreciation markets.">
+<meta property="og:title" content="Real Estate Investment Metrics Explained: Cap Rate, CoC, IRR, MOIC, and More">
+<meta property="og:description" content="A practical guide to the metrics that matter when analyzing rental property deals, and how to use them in different markets.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quickreanalyzer.com/blog/understanding-real-estate-metrics.html">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232C3437'/%3E%3Cpath d='M16 7L5 16h3v9h6v-6h4v6h6v-9h3L16 7z' fill='white'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://quickreanalyzer.com/blog/understanding-real-estate-metrics.html">
+<title>Real Estate Investment Metrics Explained: Cap Rate, CoC, IRR, MOIC, and More — Quick Real Estate Analyzer</title>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Real Estate Investment Metrics Explained: Cap Rate, CoC, IRR, MOIC, and More","description":"A practical guide to the metrics that matter when analyzing rental property deals, and how to use them in different markets.","author":{"@type":"Organization","name":"Quick Real Estate Analyzer"},"publisher":{"@type":"Organization","name":"Quick Real Estate Analyzer"},"datePublished":"2026-03-04","mainEntityOfPage":"https://quickreanalyzer.com/blog/understanding-real-estate-metrics.html"}
+</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,'Times New Roman',serif;background:#F2EDE3;color:#2C3437;line-height:1.7}
+.nav{background:#2C3437;padding:0 20px;position:sticky;top:0;z-index:20}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:52px}
+.nav-brand{color:#F2EDE3;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:1px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.nav-links{display:flex;gap:20px;list-style:none}
+.nav-links a{color:#B5A99A;font-size:12px;font-weight:600;text-decoration:none;transition:color 0.2s;letter-spacing:0.5px;text-transform:uppercase;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.nav-links a:hover,.nav-links a.active{color:#F2EDE3}
+.nav-toggle{display:none;background:none;border:none;color:#F2EDE3;font-size:22px;cursor:pointer;padding:4px}
+.page-header{background:#2C3437;padding:48px 20px;text-align:center;color:#fff}
+.page-header h1{font-size:28px;font-weight:400;margin-bottom:8px;max-width:680px;margin-left:auto;margin-right:auto}
+.page-header .meta{font-size:12px;opacity:0.6;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;letter-spacing:0.5px}
+.article{max-width:680px;margin:0 auto;padding:40px 20px 60px}
+.article h2{font-size:22px;font-weight:400;margin:32px 0 12px;color:#2C3437;font-family:Georgia,'Times New Roman',serif}
+.article h3{font-size:17px;font-weight:700;margin:24px 0 8px;color:#2C3437}
+.article p{margin-bottom:16px;font-size:15px;color:#5B6568;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.article a{color:#546070;text-decoration:underline;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.formula-box{background:#fff;border:2px solid #546070;border-radius:4px;padding:24px;margin:20px 0;text-align:center}
+.formula-box .formula{font-size:18px;font-weight:700;color:#546070;margin-bottom:8px}
+.formula-box .desc{font-size:13px;color:#7B7368}
+.example-box{background:#fff;border:1px solid #E8E3D8;border-radius:4px;padding:20px;margin:20px 0}
+.example-box .label{font-size:12px;font-weight:700;color:#7B7368;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.example-box .row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0}
+.example-box .row .val{font-weight:600}
+.example-box .row.highlight{border-top:1px solid #E8E3D8;margin-top:6px;padding-top:8px}
+.example-box .row.highlight .val{color:#5C7A61}
+.context-box{background:#F0F4F1;border:1px solid #C8D6C4;border-radius:4px;padding:20px;margin:20px 0}
+.context-box .label{font-size:12px;font-weight:700;color:#5C7A61;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.context-box p{margin-bottom:8px;font-size:14px;color:#5B6568;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.context-box p:last-child{margin-bottom:0}
+.comparison-tbl{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.comparison-tbl th{background:#2C3437;color:#F2EDE3;padding:10px 14px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
+.comparison-tbl td{padding:10px 14px;border-bottom:1px solid #E8E3D8;color:#5B6568}
+.comparison-tbl tr:last-child td{border-bottom:none}
+.comparison-tbl .metric-name{font-weight:600;color:#2C3437}
+.warn-box{background:#FDF6EE;border:1px solid #E8D5B8;border-radius:4px;padding:20px;margin:20px 0}
+.warn-box .label{font-size:12px;font-weight:700;color:#A4574B;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.warn-box p{margin-bottom:8px;font-size:14px;color:#5B6568;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif}
+.warn-box p:last-child{margin-bottom:0}
+.cta-box{background:#F9F5EC;border:1px solid #E8E3D8;border-radius:8px;padding:24px;text-align:center;margin-top:32px}
+.cta-box p{font-size:15px;font-weight:600;color:#2C3437;margin-bottom:12px}
+.cta-link{display:inline-block;background:#2C3437;color:#F2EDE3;padding:12px 28px;border-radius:4px;font-weight:700;font-size:14px;text-decoration:none}
+.related{margin-top:40px;padding-top:24px;border-top:1px solid #E8E3D8}
+.related h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.related a{display:block;color:#546070;font-size:14px;font-weight:600;margin-bottom:8px;text-decoration:none}
+.related a:hover{text-decoration:underline}
+.footer{background:#2C3437;color:#B5A99A;padding:32px 20px;font-size:13px}
+.footer-inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+.footer-col h4{color:#F2EDE3;font-size:14px;font-weight:700;margin-bottom:8px}
+.footer-col a{color:#B5A99A;text-decoration:none;display:block;line-height:2}
+.footer-col a:hover{color:#fff}
+.footer-copy{max-width:960px;margin:16px auto 0;padding-top:16px;border-top:1px solid #43474B;font-size:11px;color:#7B7368}
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:#2C3437;flex-direction:column;padding:12px 20px;gap:0;border-top:1px solid #43474B}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:10px 0;display:block}
+  .nav-toggle{display:block}
+  .page-header h1{font-size:22px}
+  .footer-inner{flex-direction:column}
+  .comparison-tbl{font-size:12px}
+  .comparison-tbl th,.comparison-tbl td{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Quick RE Analyzer</a>
+    <button type="button" class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/#calculator">Calculator</a>
+      <a href="/blog/" class="active">Blog</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Real Estate Investment Metrics Explained: Cap Rate, Cash-on-Cash, IRR, MOIC, and More</h1>
+  <div class="meta">Published March 2026</div>
+</div>
+
+<article class="article">
+
+  <p>A good real estate deal is not about any single number. The <a href="/#calculator">Quick Real Estate Analyzer</a> displays six key metrics for every deal you run, and each one answers a different question about the investment. Some tell you about the property itself. Others tell you about the return on your specific capital. Some are snapshots of year one, and others capture what happens over a full decade of ownership.</p>
+
+  <p>This guide walks through each metric, explains how it is calculated, and — just as importantly — explains when each one matters most. Not every metric carries the same weight in every market. An investor in a Midwest cash flow market and an investor in a coastal appreciation market should be reading the same dashboard very differently.</p>
+
+  <h2>Cap Rate</h2>
+
+  <div class="formula-box">
+    <div class="formula">Cap Rate = Net Operating Income / Property Value</div>
+    <div class="desc">Expressed as a percentage. Uses Year 1 NOI. For Buy &amp; Hold, the denominator is purchase price. For BRRRR, it is the after-repair value (ARV).</div>
+  </div>
+
+  <p>Cap rate is the one metric on the dashboard that has nothing to do with how you finance the deal. It ignores your down payment, your loan terms, and your closing costs. It simply asks: if you paid all cash for this property, what annual return would the operating income produce?</p>
+
+  <p>This makes cap rate most useful for comparing properties on an apples-to-apples basis. A fourplex with a 7.5% cap rate is producing more income relative to its price than a fourplex with a 5.5% cap rate, regardless of what loan each buyer gets. It is also the metric most commonly used by appraisers and commercial brokers to price investment properties.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>A higher cap rate means more income per dollar of property value, but it often signals higher risk, a less desirable location, or deferred maintenance. A lower cap rate usually indicates a more stable, appreciating market where investors are willing to accept less income in exchange for long-term value growth. There is no universally "good" cap rate — it depends entirely on the market and the property class.</p>
+
+  <div class="example-box">
+    <div class="label">Same Property, Two Perspectives</div>
+    <div class="row"><span>Purchase Price</span><span class="val">$200,000</span></div>
+    <div class="row"><span>Monthly Rent</span><span class="val">$1,800</span></div>
+    <div class="row"><span>Annual Gross Income (less 5% vacancy)</span><span class="val">$20,520</span></div>
+    <div class="row"><span>Annual Operating Expenses</span><span class="val">$6,156</span></div>
+    <div class="row"><span>Net Operating Income (NOI)</span><span class="val">$14,364</span></div>
+    <div class="row highlight"><span>Cap Rate</span><span class="val">7.2%</span></div>
+  </div>
+
+  <div class="context-box">
+    <div class="label">Cash Flow vs. Appreciation Markets</div>
+    <p>In cash flow markets (parts of the Midwest, Southeast, and smaller metros), you will commonly see cap rates between 7% and 10%. Properties are priced primarily on their income. Cap rate is a critical metric here because it directly reflects how much income the property generates per dollar spent.</p>
+    <p>In appreciation markets (coastal cities, high-growth metros), cap rates often run between 3% and 5%. Investors accept thinner income margins because they expect the property value to grow significantly over time. A low cap rate does not mean the deal is bad — it means the return story is weighted toward appreciation rather than day-one cash flow.</p>
+  </div>
+
+  <h2>Cash-on-Cash Return (CoC)</h2>
+
+  <div class="formula-box">
+    <div class="formula">Cash-on-Cash = Year 1 Cash Flow / Total Cash Invested</div>
+    <div class="desc">Cash flow is after all expenses and debt service. Total cash invested includes down payment, closing costs, rehab, and furnishing.</div>
+  </div>
+
+  <p>Cash-on-Cash return is the metric that answers the most basic investor question: how much cash does this deal put in my pocket each year, relative to the cash I put in? Unlike cap rate, CoC includes your financing. A deal with a low cap rate can still have a strong CoC return if the loan terms are favorable, because leverage amplifies returns when the cap rate exceeds the cost of debt.</p>
+
+  <p>This is the metric most investors look at first when evaluating a deal, and it is the most intuitive. If you invest $50,000 in a rental and it produces $5,000 in annual cash flow after all expenses and mortgage payments, your CoC is 10%. You can compare that directly to what your money would earn in a savings account, a stock portfolio, or another rental.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>Many investors target a minimum CoC return of 8% to 12% for traditional rentals. BRRRR deals, where you refinance and pull most of your capital back out, can show very high (sometimes infinite) CoC returns because the denominator — cash left in the deal — can be very small. A negative CoC means the property is losing cash each month, which may still be acceptable in an appreciation market if the equity growth and tax benefits compensate.</p>
+
+  <div class="context-box">
+    <div class="label">Cash Flow vs. Appreciation Markets</div>
+    <p>In cash flow markets, CoC is arguably the single most important metric. Investors in these markets are buying for income, and a deal that does not clear an 8% to 10% CoC threshold is often passed over. Since property values may grow slowly, day-one cash flow is the primary source of return.</p>
+    <p>In appreciation markets, many deals will show a CoC of 2% to 5% — or even negative in year one. Investors in San Diego, Austin, or Boise might accept a 3% CoC because they expect the property to appreciate 5% to 8% per year. The return shows up in equity growth and eventually in a profitable sale, not in monthly checks. CoC still matters here, but it is not the deciding metric.</p>
+  </div>
+
+  <h2>Net Operating Income (NOI) and Monthly Cash Flow</h2>
+
+  <div class="formula-box">
+    <div class="formula">NOI = Effective Rent &minus; Operating Expenses</div>
+    <div class="desc">Operating expenses include vacancy, insurance, taxes, management, and CapEx reserves. NOI excludes debt service (mortgage payments).</div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">Monthly Cash Flow = (NOI &minus; Annual Debt Service) / 12</div>
+    <div class="desc">This is the actual cash in your pocket each month after all expenses and mortgage.</div>
+  </div>
+
+  <p>NOI is the building block behind both cap rate and cash-on-cash return. It represents what the property earns before financing costs. Monthly cash flow is what remains after the mortgage is paid. Both appear in the calculator results, and while they are not standalone return metrics, they ground the analysis in real dollars.</p>
+
+  <p>Monthly cash flow is particularly important for investors who depend on rental income to cover their living expenses or who want to build a self-sustaining portfolio. A deal that shows an attractive IRR but produces negative monthly cash flow requires you to feed the property out of pocket, which introduces risk if vacancies or unexpected repairs arise.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>There is no universal minimum, but many investors look for at least $100 to $200 per unit per month in cash flow as a baseline for Buy &amp; Hold deals. The Quick Real Estate Analyzer shows monthly cash flow in the results so you can see exactly where you stand. Watch how this number changes in the pro forma table as rents and expenses grow over time.</p>
+
+  <h2>Internal Rate of Return (IRR)</h2>
+
+  <div class="formula-box">
+    <div class="formula">IRR = The discount rate that makes the NPV of all cash flows equal to zero</div>
+    <div class="desc">Includes initial cash invested, 10 years of annual cash flow, and net sale proceeds at the end of year 10.</div>
+  </div>
+
+  <p>IRR is the most comprehensive metric in the calculator. It accounts for the time value of money, the total cash flow over the holding period, and the profit from selling the property. It answers the question: what is the annualized rate of return on this investment over a 10-year hold?</p>
+
+  <p>Where CoC only looks at year one and cap rate ignores financing, IRR captures the entire picture: cash flow that grows over time as rents increase, the remaining loan balance at sale, closing costs on the sale, and the appreciated property value. It is the closest thing to a single number that tells you how this investment compares to other opportunities over time.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>Because IRR accounts for both income and appreciation, it tends to be higher than CoC in most deals. An investor might see a 9% CoC but a 17% IRR, because the property is also appreciating and the loan is being paid down by tenants. A typical target for IRR in residential real estate is 12% to 20%, though this varies by risk level and market.</p>
+
+  <p>One caveat: IRR is highly sensitive to the assumed sale price at year 10, which depends on your appreciation rate input. If appreciation does not materialize, the actual IRR will be lower than projected. Always run the sensitivity analysis in the calculator to see how IRR changes under different appreciation and rent growth assumptions.</p>
+
+  <div class="context-box">
+    <div class="label">Cash Flow vs. Appreciation Markets</div>
+    <p>IRR is the great equalizer between cash flow and appreciation strategies. A property in Cleveland with an 8% cap rate and 2% annual appreciation might show a 15% IRR. A property in Denver with a 4% cap rate and 6% annual appreciation might also show a 15% IRR. The total return is the same — it just arrives through different channels.</p>
+    <p>This is why IRR is especially important in appreciation markets. A deal with a mediocre CoC can still be excellent when you factor in 10 years of appreciation and loan paydown. Conversely, a high CoC deal in a stagnant market may show a lower IRR than expected because the exit value has not grown much.</p>
+  </div>
+
+  <h2>Multiple on Invested Capital (MOIC)</h2>
+
+  <div class="formula-box">
+    <div class="formula">MOIC = (Total Cash Flow + Sale Proceeds) / Total Cash Invested</div>
+    <div class="desc">Expressed as a multiple (e.g., 2.4x). Includes all cash flow over 10 years plus net sale proceeds.</div>
+  </div>
+
+  <p>MOIC tells you how many times you got your money back. If you invest $50,000 and over 10 years you collect $45,000 in cash flow and net $80,000 from the sale, your total return is $125,000. Your MOIC is 2.5x — you got your original investment back two and a half times.</p>
+
+  <p>MOIC is simpler than IRR because it ignores the timing of cash flows. It does not care whether you received $5,000 per year for 10 years or $50,000 all at once in year 10 — the MOIC is the same. But it is a useful gut-check. An MOIC below 1.0x means you lost money on the deal. Above 2.0x means you more than doubled your investment.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>Use MOIC alongside IRR, not instead of it. A deal with a 3.0x MOIC over 10 years is attractive. But if most of that return comes from a speculative sale price, you should weight it differently than a deal with a 2.5x MOIC where most of the return comes from steady cash flow. MOIC tells you the magnitude of the return; IRR tells you the speed.</p>
+
+  <div class="context-box">
+    <div class="label">Cash Flow vs. Appreciation Markets</div>
+    <p>MOIC tends to be higher in appreciation markets because the sale proceeds dominate the total return. A property that doubles in value over 10 years will contribute heavily to the multiple even if cash flow was thin. In cash flow markets, MOIC is built more gradually from accumulated cash flow with a smaller contribution from the sale.</p>
+  </div>
+
+  <h2>Flip Metrics: ROI, Annualized ROI, and Profit</h2>
+
+  <div class="formula-box">
+    <div class="formula">ROI = Net Profit / Total Cash Invested</div>
+    <div class="desc">Net profit = sale price &minus; purchase price &minus; rehab &minus; closing costs &minus; hold costs &minus; financing costs.</div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula">Annualized ROI = (1 + ROI)<sup>12/hold months</sup> &minus; 1</div>
+    <div class="desc">Adjusts ROI to reflect the hold period, so you can compare short and long flips.</div>
+  </div>
+
+  <p>Flip analysis is simpler than rental analysis because there is no ongoing cash flow. The question is straightforward: how much profit do you walk away with, and what return does that represent on the capital you tied up?</p>
+
+  <p>Raw ROI tells you the percentage return on the deal. Annualized ROI adjusts for how long your money was tied up. A 20% ROI on a 4-month flip is much better than a 20% ROI on a 12-month flip, because in the first scenario you can redeploy your capital into more deals within the same year.</p>
+
+  <h3>How to interpret it</h3>
+
+  <p>Most experienced flippers target a minimum profit of 10% to 15% of ARV (the 70% rule is a common rough guideline — pay no more than 70% of ARV minus rehab costs). Annualized ROI above 40% to 50% is typical for successful flips, though the risk profile is very different from buy-and-hold investing. Flips have binary outcomes: you either hit your rehab budget and sell at your target price, or you do not.</p>
+
+  <h2>Putting It All Together</h2>
+
+  <p>No single metric tells the whole story. Here is how to think about using them together, depending on your market and strategy:</p>
+
+  <table class="comparison-tbl">
+    <tr>
+      <th>Metric</th>
+      <th>Cash Flow Market</th>
+      <th>Appreciation Market</th>
+    </tr>
+    <tr>
+      <td class="metric-name">Cap Rate</td>
+      <td>Primary screening tool. Expect 7&ndash;10%. Reject deals below 6%.</td>
+      <td>Less decisive. Expect 3&ndash;5%. Low cap rate is normal, not a red flag.</td>
+    </tr>
+    <tr>
+      <td class="metric-name">Cash-on-Cash</td>
+      <td>Key decision metric. Target 8&ndash;12%+. Day-one cash flow drives the deal.</td>
+      <td>Important for sustainability, but 2&ndash;5% may be acceptable if appreciation thesis is strong.</td>
+    </tr>
+    <tr>
+      <td class="metric-name">Monthly Cash Flow</td>
+      <td>Must be positive. $100&ndash;200+/unit/month is a common floor.</td>
+      <td>Break-even or slight negative may be tolerable. Watch for cash drain risk.</td>
+    </tr>
+    <tr>
+      <td class="metric-name">IRR</td>
+      <td>Confirms the deal holds up over time. Should exceed 12%+.</td>
+      <td>The most important long-term metric. Captures appreciation &amp; loan paydown. Target 15%+.</td>
+    </tr>
+    <tr>
+      <td class="metric-name">MOIC</td>
+      <td>Gut-check on total return. 2.0x+ over 10 years is solid.</td>
+      <td>Often higher due to appreciation. Verify with sensitivity analysis on price growth.</td>
+    </tr>
+  </table>
+
+  <h3>The danger of relying on one number</h3>
+
+  <p>The most common mistake new investors make is fixating on a single metric. A deal with a 12% CoC but a mediocre IRR may be generating cash flow today but has no growth runway — rents might be at market ceiling, or the property may be in a declining area. Conversely, a deal with a 2% CoC but an 18% IRR is betting heavily on appreciation. If the market flattens, the IRR collapses while you are feeding the property cash every month.</p>
+
+  <p>The calculator's sensitivity analysis is designed to stress-test these assumptions. After you run a deal, scroll to the sensitivity table and see how your CoC and IRR change when rent growth or appreciation shifts by a few percentage points. The best deals hold up across a range of assumptions. Fragile deals look great under one scenario and fall apart under others.</p>
+
+  <div class="warn-box">
+    <div class="label">Important Note</div>
+    <p>All projected metrics in the calculator are estimates based on the assumptions you enter. Actual returns will vary based on real-world factors including vacancy rates, maintenance costs, market conditions, interest rate changes, and local tax policy. Always build in conservative assumptions and verify key inputs with local market data before making investment decisions.</p>
+  </div>
+
+  <div class="cta-box">
+    <p>Run your own numbers — see all six metrics for any deal, instantly</p>
+    <a href="/#calculator" class="cta-link">Open the Calculator</a>
+  </div>
+
+  <div class="related">
+    <h3>Related Articles</h3>
+    <a href="/blog/cash-on-cash-return-explained.html">What Is Cash-on-Cash Return? (And How to Calculate It)</a>
+    <a href="/blog/buy-and-hold-vs-brrrr-vs-flip.html">Buy &amp; Hold vs. BRRRR vs. Flip: Which Strategy Is Right for You?</a>
+    <a href="/blog/cost-segregation-capital-recycling.html">Cost Segregation and Capital Recycling: Build a Portfolio With Less Equity</a>
+    <a href="/blog/how-to-analyze-brrrr-deal.html">How to Analyze a BRRRR Deal (Free Calculator)</a>
+  </div>
+</article>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Quick RE Analyzer</h4>
+      <div style="line-height:1.6">Free real estate deal analysis.<br>Compare Buy &amp; Hold, BRRRR, and Flip.</div>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <a href="/#calculator">Deal Calculator</a>
+      <a href="/blog/how-to-analyze-brrrr-deal.html">BRRRR Guide</a>
+      <a href="/blog/cash-on-cash-return-explained.html">CoC Explained</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="/blog/buy-and-hold-vs-brrrr-vs-flip.html">Strategy Comparison</a>
+      <a href="/blog/cost-segregation-capital-recycling.html">Cost Segregation Guide</a>
+      <a href="/blog/understanding-real-estate-metrics.html">Metrics Explained</a>
+      <a href="/blog/our-story.html">Our Story</a>
+      <a href="/about.html">About</a>
+    </div>
+  </div>
+  <div class="footer-copy">&copy; 2026 Quick Real Estate Analyzer. For educational purposes only. Not financial advice.</div>
+</footer>
+
+</body>
+</html>
